@@ -27,6 +27,9 @@
     <ClCompile Include="src\maze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\sprite_factory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
@@ -38,5 +41,11 @@
     <ClInclude Include="src\maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\sprite_factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\maze.txt" />
   </ItemGroup>
 </Project>
