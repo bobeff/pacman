@@ -14,6 +14,11 @@ Maze::Maze(Game& game) : m_Game(game)
   LoadTiles();
 }
 
+bool Maze::IsMovePossible(const sf::Vector2i& position) const
+{
+  return m_Tiles[position.y][position.x] != '#';
+}
+
 void Maze::LoadTiles()
 {
   FILE* finp = fopen("assets/maze.txt", "r");
@@ -39,14 +44,34 @@ void Maze::Draw()
     {
       switch (m_Tiles[y][x])
       {
-      case '.': sprite = &m_DotSprite; break;
-      case '@': sprite = &m_EnergizerSprite; break;
-      default: sprite = nullptr;
+        case '.': sprite = &m_DotSprite; break;
+        case '@': sprite = &m_EnergizerSprite; break;
+        default: sprite = nullptr;
       }
 
       if (!sprite) continue;
-      sprite->setPosition(float(x * 16), float(y * 16));
+      SetSpritePosition(*sprite, x, y);
       m_Game.m_Window.draw(*sprite);
     }
   }
+}
+
+void Maze::SetSpritePosition(sf::Sprite& sprite, float x, float y)
+{
+  sprite.setPosition(x * 16, y * 16);
+}
+
+void Maze::SetSpritePosition(sf::Sprite& sprite, int x, int y)
+{
+  SetSpritePosition(sprite, float(x), float(y));
+}
+
+void Maze::SetSpritePosition(sf::Sprite& sprite, const sf::Vector2i& position)
+{
+  SetSpritePosition(sprite, position.x, position.y);
+}
+
+void Maze::SetSpritePosition(sf::Sprite& sprite, const sf::Vector2f& position)
+{
+  SetSpritePosition(sprite, position.x, position.y);
 }

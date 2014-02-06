@@ -8,6 +8,16 @@ public:
   Maze(Game& game);
   void Draw();
 
+  bool IsMovePossible(const sf::Vector2i& position) const;
+
+  static void SetSpritePosition(sf::Sprite& sprite, int x, int y);
+  static void SetSpritePosition(sf::Sprite& sprite, float x, float y);
+  static void SetSpritePosition(sf::Sprite& sprite, const sf::Vector2i& position);
+  static void SetSpritePosition(sf::Sprite& sprite, const sf::Vector2f& position);
+
+  static const sf::Uint8 X_SIZE = 28;
+  static const sf::Uint8 Y_SIZE = 36;
+
 private:
   void LoadTiles();
 
@@ -17,9 +27,6 @@ private:
   sf::Sprite m_Sprite;
   sf::Sprite m_DotSprite;
   sf::Sprite m_EnergizerSprite;
-
-  static const uint8_t X_SIZE = 28;
-  static const uint8_t Y_SIZE = 36;
 
   char m_Tiles[Y_SIZE][X_SIZE];
 };

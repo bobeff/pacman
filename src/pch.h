@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <cassert>
 
 #ifdef WIN32
   #include <Windows.h>
