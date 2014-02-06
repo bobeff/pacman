@@ -69,7 +69,10 @@ void Pacman::Update(float elapsedTime)
     m_PreviousTime = elapsedTime;
 
     if (m_Position != m_NextPosition)
+    {
       m_Position = m_NextPosition;
+      m_Game.m_Maze.ConsumeTile(m_Position);
+    }
 
     sf::Vector2i newPosition = m_Position;
     UpdatePosition(NewDirection, newPosition);

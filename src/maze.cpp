@@ -14,8 +14,23 @@ Maze::Maze(Game& game) : m_Game(game)
   LoadTiles();
 }
 
+static void AssertPositionInRange(const sf::Vector2i& position)
+{
+  assert(position.x >= 0 && position.x < Maze::X_SIZE);
+  assert(position.y >= 0 && position.y < Maze::Y_SIZE);
+}
+
+void Maze::ConsumeTile(const sf::Vector2i& position)
+{
+  AssertPositionInRange(position);
+  char& tile = m_Tiles[position.y][position.x];
+  assert(tile != '#');
+  tile = ' ';
+}
+
 bool Maze::IsMovePossible(const sf::Vector2i& position) const
 {
+  AssertPositionInRange(position);
   return m_Tiles[position.y][position.x] != '#';
 }
 

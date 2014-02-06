@@ -7,6 +7,7 @@ class Maze
 public:
   Maze(Game& game);
   void Draw();
+  void ConsumeTile(const sf::Vector2i& position);
 
   bool IsMovePossible(const sf::Vector2i& position) const;
 
