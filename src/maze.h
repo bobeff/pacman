@@ -8,7 +8,6 @@ public:
   Maze(Game& game);
   void Draw();
   void ConsumeTile(const sf::Vector2i& position);
-
   bool IsMovePossible(const sf::Vector2i& position) const;
 
   static void SetSpritePosition(sf::Sprite& sprite, int x, int y);
@@ -18,6 +17,7 @@ public:
 
   static const sf::Uint8 X_SIZE = 28;
   static const sf::Uint8 Y_SIZE = 36;
+  static const sf::Uint8 TILE_SIZE = 16;
 
 private:
   void LoadTiles();

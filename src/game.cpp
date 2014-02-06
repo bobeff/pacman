@@ -4,9 +4,24 @@
 Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
+  , m_TilesConsumed(0)
+  , m_Score(0)
 {
   m_Window.create(sf::VideoMode(448, 576), "Pacman", sf::Style::Titlebar | sf::Style::Close);
   m_Window.setVerticalSyncEnabled(true);
+
+  m_Font.loadFromFile("assets/arial.ttf");
+  m_Text.setFont(m_Font);
+  m_Text.setCharacterSize(Maze::TILE_SIZE);
+  m_Text.setColor(sf::Color::Yellow);
+  m_Text.setStyle(sf::Text::Bold);
+}
+
+void Game::DrawText(const char* str, float x, float y)
+{
+  m_Text.setString(str);
+  m_Text.setPosition(x, y);
+  m_Window.draw(m_Text);
 }
 
 int Game::Run()
@@ -52,6 +67,12 @@ int Game::Run()
     m_Window.clear(sf::Color::Black);
     m_Maze.Draw();
     m_Pacman.Draw();
+
+    char scoreStr[16];
+    sprintf(scoreStr, "Score: %d", m_Score);
+    static const float GAME_INFO_Y_POSITION = 34.5f * Maze::TILE_SIZE;
+    DrawText(scoreStr, Maze::TILE_SIZE, GAME_INFO_Y_POSITION);
+
     m_Window.display();
   }
 

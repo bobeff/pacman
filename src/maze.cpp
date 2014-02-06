@@ -25,6 +25,16 @@ void Maze::ConsumeTile(const sf::Vector2i& position)
   AssertPositionInRange(position);
   char& tile = m_Tiles[position.y][position.x];
   assert(tile != '#');
+  if (tile == '.')
+  {
+    ++m_Game.m_TilesConsumed;
+    m_Game.m_Score += 10;
+  }
+  else if (tile == '@')
+  {
+    ++m_Game.m_TilesConsumed;
+    m_Game.m_Score += 100;
+  }
   tile = ' ';
 }
 
@@ -73,7 +83,7 @@ void Maze::Draw()
 
 void Maze::SetSpritePosition(sf::Sprite& sprite, float x, float y)
 {
-  sprite.setPosition(x * 16, y * 16);
+  sprite.setPosition(x * TILE_SIZE, y * TILE_SIZE);
 }
 
 void Maze::SetSpritePosition(sf::Sprite& sprite, int x, int y)
