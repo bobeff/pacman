@@ -8,6 +8,7 @@ enum class Direction
   SOUTH,
   WEST,
   NORTH,
+  NONE,
 };
 
 class Pacman

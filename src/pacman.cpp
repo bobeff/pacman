@@ -8,8 +8,8 @@ Pacman::Pacman(Game& game)
   , m_PreviousTime(0.f)
   , m_Position(14, 26)
   , m_NextPosition(m_Position)
-  , m_Direction(Direction::WEST)
-  , NewDirection(Direction::WEST)
+  , m_Direction(Direction::NONE)
+  , NewDirection(Direction::NONE)
   , m_AnimationStage(1)
 {
   SpriteFactory& factory = SpriteFactory::Get();
@@ -43,8 +43,9 @@ void Pacman::Update(float elapsedTime)
 {
   static const float MOVE_TIME_INTERVAL = .15f;
 
-  float deltaTime = elapsedTime - m_PreviousTime;
+  if (NewDirection == Direction::NONE) return;
 
+  float deltaTime = elapsedTime - m_PreviousTime;
   if (deltaTime < MOVE_TIME_INTERVAL)
   {
     if (m_Position == m_NextPosition)
@@ -87,7 +88,13 @@ void Pacman::Update(float elapsedTime)
       m_NextPosition = newPosition;
       ++m_AnimationStage %= 2;
       m_CurrentSprite = m_Sprites[int(m_Direction)][m_AnimationStage];
-      Maze::SetSpritePosition(m_CurrentSprite, m_Position);
     }
+    else
+    {
+      NewDirection = Direction::NONE;
+      m_CurrentSprite = m_InitialSprite;
+    }
+
+    Maze::SetSpritePosition(m_CurrentSprite, m_Position);
   }
 }
