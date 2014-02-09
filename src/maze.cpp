@@ -38,10 +38,10 @@ void Maze::ConsumeTile(const sf::Vector2i& position)
   tile = ' ';
 }
 
-bool Maze::IsMovePossible(const sf::Vector2i& position) const
+char Maze::GetTile(const sf::Vector2i& position) const
 {
   AssertPositionInRange(position);
-  return m_Tiles[position.y][position.x] != '#';
+  return m_Tiles[position.y][position.x];
 }
 
 void Maze::LoadTiles()

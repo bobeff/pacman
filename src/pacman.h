@@ -1,38 +1,19 @@
 #pragma once
 
-class Game;
+#include "actor.h"
 
-enum class Direction
-{
-  EAST,
-  SOUTH,
-  WEST,
-  NORTH,
-  NONE,
-};
-
-class Pacman
+class Pacman : public Actor
 {
 public:
   Pacman(Game& game);
   void Draw() const;
-  void Update(float elapsedTime);
  
   Direction NewDirection;
 
 private:
-  Game& m_Game;
+  void SetInitialSpriteAsCurrent();
+  bool IsMovePossible(const sf::Vector2i& position) const;
+  virtual void UpdatePosition();
 
-  sf::Sprite m_CurrentSprite;
   sf::Sprite m_InitialSprite;
-  // for each direction and each animation state
-  sf::Sprite m_Sprites[4][2];
-
-  float m_PreviousTime;
-
-  sf::Vector2i m_Position;
-  sf::Vector2i m_NextPosition;
-  
-  Direction m_Direction;
-  sf::Uint8 m_AnimationStage;
 };

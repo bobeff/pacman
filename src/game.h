@@ -2,11 +2,14 @@
 
 #include "maze.h"
 #include "pacman.h"
+#include "ghost.h"
 
 class Game
 {
   friend class Maze;
+  friend class Actor;
   friend class Pacman;
+  friend class Ghost;
 
 public:
   Game();
@@ -23,6 +26,7 @@ private:
 
   Maze m_Maze;
   Pacman m_Pacman;
+  Ghost m_Ghost;
 
   sf::Uint8  m_TilesConsumed;
   sf::Uint16 m_Score;

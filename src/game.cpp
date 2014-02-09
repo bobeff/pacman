@@ -4,6 +4,7 @@
 Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
+  , m_Ghost(*this, sf::Vector2i(14, 14), 1)
   , m_TilesConsumed(0)
   , m_Score(0)
 {
@@ -63,10 +64,12 @@ int Game::Run()
 
     float elapsedTime = m_Clock.getElapsedTime().asSeconds();
     m_Pacman.Update(elapsedTime);
+    m_Ghost.Update(elapsedTime);
 
     m_Window.clear(sf::Color::Black);
     m_Maze.Draw();
     m_Pacman.Draw();
+    m_Ghost.Draw();
 
     char scoreStr[16];
     sprintf(scoreStr, "Score: %d", m_Score);

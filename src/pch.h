@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <cassert>
 
 #ifdef WIN32
@@ -7,3 +8,6 @@
 #endif
 
 #include <SFML/Graphics.hpp>
+
+#undef min
+#undef max
