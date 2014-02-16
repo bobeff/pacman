@@ -36,9 +36,9 @@ sf::Sprite SpriteFactory::CreateSprite(int x, int y) const
 
 SpriteFactory& SpriteFactory::Get()
 {
-  if (!m_Instance)
-    m_Instance = new SpriteFactory();
-  return *m_Instance;
+  if (!s_Instance)
+    s_Instance = new SpriteFactory();
+  return *s_Instance;
 }
 
-SpriteFactory* SpriteFactory::m_Instance = nullptr;
+SpriteFactory* SpriteFactory::s_Instance = nullptr;

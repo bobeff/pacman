@@ -100,3 +100,9 @@ void Maze::SetSpritePosition(sf::Sprite& sprite, const sf::Vector2f& position)
 {
   SetSpritePosition(sprite, position.x, position.y);
 }
+
+void Maze::TruncatePosition(sf::Vector2i& position)
+{
+  if (position.x < 0) position.x = Maze::X_SIZE - 1;
+  if (position.x >= Maze::X_SIZE) position.x = 0;
+}

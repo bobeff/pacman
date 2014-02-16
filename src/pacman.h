@@ -13,7 +13,7 @@ public:
 private:
   void SetInitialSpriteAsCurrent();
   bool IsMovePossible(const sf::Vector2i& position) const;
-  virtual void UpdatePosition();
+  virtual void UpdatePosition(float elapsedTime);
 
   sf::Sprite m_InitialSprite;
 };

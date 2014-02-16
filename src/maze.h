@@ -14,6 +14,7 @@ public:
   static void SetSpritePosition(sf::Sprite& sprite, float x, float y);
   static void SetSpritePosition(sf::Sprite& sprite, const sf::Vector2i& position);
   static void SetSpritePosition(sf::Sprite& sprite, const sf::Vector2f& position);
+  static void TruncatePosition(sf::Vector2i& position);
 
   static const sf::Uint8 X_SIZE = 28;
   static const sf::Uint8 Y_SIZE = 36;

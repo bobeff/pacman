@@ -61,6 +61,6 @@ void Actor::Update(float elapsedTime)
   else
   {
     m_PreviousTime = elapsedTime;
-    UpdatePosition();
+    UpdatePosition(elapsedTime);
   }
 }

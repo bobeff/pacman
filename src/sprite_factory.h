@@ -14,7 +14,7 @@ public:
 private:
   sf::Sprite CreateSprite(int x, int y) const;
 
-  static SpriteFactory* m_Instance;
+  static SpriteFactory* s_Instance;
 
   sf::Texture m_Texture;
 };

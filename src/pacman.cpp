@@ -3,8 +3,11 @@
 #include "game.h"
 #include "sprite_factory.h"
 
+static const sf::Vector2i START_TILE(14, 26);
+static const float MOVE_TIME = .14f;
+
 Pacman::Pacman(Game& game)
-  : Actor(game, sf::Vector2i(14, 26), 0, .14f)
+  : Actor(game, START_TILE, 0, MOVE_TIME)
 {
   NewDirection = Direction::NONE;
   m_Direction = Direction::NONE;
@@ -27,15 +30,14 @@ static void UpdatePosition(Direction direction, sf::Vector2i& position)
 {
   switch (direction)
   {
-    case Direction::WEST: --position.x; break;
-    case Direction::EAST: ++position.x; break;
+    case Direction::WEST:  --position.x; break;
+    case Direction::EAST:  ++position.x; break;
     case Direction::NORTH: --position.y; break;
     case Direction::SOUTH: ++position.y; break;
     default: assert(0);
   }
 
-  if (position.x < 0) position.x = Maze::X_SIZE - 1;
-  if (position.x >= Maze::X_SIZE) position.x = 0;
+  Maze::TruncatePosition(position);
 }
 
 bool Pacman::IsMovePossible(const sf::Vector2i& position) const
@@ -44,7 +46,7 @@ bool Pacman::IsMovePossible(const sf::Vector2i& position) const
   return tile != '#' && tile != '-';
 }
 
-void Pacman::UpdatePosition()
+void Pacman::UpdatePosition(float elapsedTime)
 {
   if (NewDirection == Direction::NONE)
     return;

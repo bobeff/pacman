@@ -1,10 +1,13 @@
 #include "pch.h"
 #include "game.h"
 
+static const sf::Vector2i RED_GHOST_START_TILE(14, 14);
+static const sf::Vector2i RED_GHOST_SCATTER_TARGET(25, 0);
+
 Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
-  , m_Ghost(*this, sf::Vector2i(14, 14), 1)
+  , m_Ghost(*this, RED_GHOST_START_TILE, RED_GHOST_SCATTER_TARGET, 1)
   , m_TilesConsumed(0)
   , m_Score(0)
 {
