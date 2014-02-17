@@ -16,6 +16,8 @@ class Actor
 public:
   Actor(Game& game, const sf::Vector2i& startPosition,
     int imagesIndex, float moveTimeInterval);
+  virtual ~Actor() {}
+
   void Draw() const;
   void Update(float elapsedTime);
   const sf::Vector2i& GetPosition() const;
@@ -28,6 +30,7 @@ protected:
   Game& m_Game;
 
   sf::Sprite* m_CurrentSprite;
+
   // for each direction and each animation state
   typedef sf::Sprite ActorSprites[4][2];
   ActorSprites m_Sprites;

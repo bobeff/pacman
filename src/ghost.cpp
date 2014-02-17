@@ -3,34 +3,31 @@
 #include "game.h"
 
 static const float MOVE_TIME = .15f;
-static const float CHASE_TIME = 20.f;
-static const float SCATTER_TIME = 10.f;
 
 Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& target, int spritesIndex)
   : Actor(game, startPosition, spritesIndex, MOVE_TIME)
   , m_CameFrom(startPosition)
   , m_ScatterTargetTile(target)
-  , m_Mode(Mode::CHASE)
-  , m_ModeStartTime(0.f)
 {
+  m_Modes[GhostMode::CHASE] = new ChaseMode(*this);
+  m_Modes[GhostMode::SCATTER] = new ScatterMode(*this);
+  m_Mode = m_Modes[GhostMode::CHASE];
+}
+
+Ghost::~Ghost()
+{
+  for (int i = 0; i < GhostMode::MODES_COUNT; ++i)
+    delete m_Modes[i];
 }
 
 const sf::Vector2i& Ghost::GetTargetTile() const
 {
-  switch (m_Mode)
-  {
-    case Mode::CHASE: return m_Game.m_Pacman.GetPosition();
-    case Mode::SCATTER: return m_ScatterTargetTile;
-    default: assert(0);
-  }
-
-  static const sf::Vector2i ZERO;
-  return ZERO;
+  return m_Game.m_Pacman.GetPosition();
 }
 
 int Ghost::GetDistanceToTarget(const sf::Vector2i& position) const
 {
-  const sf::Vector2i& target = GetTargetTile();
+  const sf::Vector2i& target = m_Mode->GetTargetTile();
 #define SQR(X) ((X) * (X))
   return SQR(target.x - position.x) + SQR(target.y - position.y);
 #undef SQR
@@ -41,34 +38,6 @@ bool Ghost::IsMovePossible(const sf::Vector2i& position) const
   char tile = m_Game.m_Maze.GetTile(position);
   char tileCameFrom = m_Game.m_Maze.GetTile(m_CameFrom);
   return tile != '#' && (tile != '-' || tile == '-' && tileCameFrom == '-');
-}
-
-bool Ghost::CheckModeChange(float elapsedTime)
-{
-  float deltaTime = elapsedTime - m_ModeStartTime;
-  
-  switch (m_Mode)
-  {
-    case Mode::CHASE:
-      if (deltaTime >= CHASE_TIME)
-      {
-        m_Mode = Mode::SCATTER;
-        m_ModeStartTime = elapsedTime;
-        return true;
-      }
-      break;
-    case Mode::SCATTER:
-      if (deltaTime >= SCATTER_TIME)
-      {
-        m_Mode = Mode::CHASE;
-        m_ModeStartTime = elapsedTime;
-        return true;
-      }
-      break;
-    default: assert(0);
-  }
-
-  return false;
 }
 
 void Ghost::UpdatePosition(float elapsedTime)
@@ -84,7 +53,7 @@ void Ghost::UpdatePosition(float elapsedTime)
     sf::Vector2i( 0, -1), // north
   };
 
-  if (CheckModeChange(elapsedTime))
+  if (m_Mode->Change(elapsedTime))
   {
     m_NextPosition = m_CameFrom;
     m_Direction = Direction((int(m_Direction) + 2) % 4);
