@@ -27,7 +27,7 @@ protected:
 
   Game& m_Game;
 
-  sf::Sprite m_CurrentSprite;
+  sf::Sprite* m_CurrentSprite;
   // for each direction and each animation state
   typedef sf::Sprite ActorSprites[4][2];
   ActorSprites m_Sprites;

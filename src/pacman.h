@@ -6,7 +6,6 @@ class Pacman : public Actor
 {
 public:
   Pacman(Game& game);
-  void Draw() const;
  
   Direction NewDirection;
 

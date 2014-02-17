@@ -18,13 +18,13 @@ Actor::Actor(Game& game, const sf::Vector2i& startPosition, int imagesIndex, flo
 
 void Actor::Draw() const
 {
-  m_Game.m_Window.draw(m_CurrentSprite);
+  m_Game.m_Window.draw(*m_CurrentSprite);
 }
 
 void Actor::SetCurrentSprite()
 {
-  m_CurrentSprite = m_Sprites[int(m_Direction)][m_AnimationStage];
-  Maze::SetSpritePosition(m_CurrentSprite, m_Position);
+  m_CurrentSprite = &(m_Sprites[int(m_Direction)][m_AnimationStage]);
+  Maze::SetSpritePosition(*m_CurrentSprite, m_Position);
 }
 
 const sf::Vector2i& Actor::GetPosition() const
@@ -42,14 +42,14 @@ void Actor::UpdateAnimation(float deltaTime)
 
   switch (m_Direction)
   {
-  case Direction::WEST: position.x -= deltaMove; break;
-  case Direction::EAST: position.x += deltaMove; break;
+  case Direction::WEST:  position.x -= deltaMove; break;
+  case Direction::EAST:  position.x += deltaMove; break;
   case Direction::NORTH: position.y -= deltaMove; break;
   case Direction::SOUTH: position.y += deltaMove; break;
   default: assert(0);
   }
 
-  Maze::SetSpritePosition(m_CurrentSprite, position);
+  Maze::SetSpritePosition(*m_CurrentSprite, position);
 }
 
 void Actor::Update(float elapsedTime)
