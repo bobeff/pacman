@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ghost.h"
 #include "game.h"
+#include "sprite_factory.h"
 
 static const float MOVE_TIME = .15f;
 
@@ -11,7 +12,14 @@ Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& 
 {
   m_Modes[GhostMode::CHASE] = new ChaseMode(*this);
   m_Modes[GhostMode::SCATTER] = new ScatterMode(*this);
+  m_Modes[GhostMode::ABOUT_TO_RUN] = new AboutToRunMode(*this);
+  m_Modes[GhostMode::RUN] = new RunMode(*this);
+  m_Modes[GhostMode::ABOUT_TO_STOP_RUN] = new AboutToStopRunMode(*this);
   m_Mode = m_Modes[GhostMode::CHASE];
+
+  SpriteFactory& factory = SpriteFactory::Get();
+  factory.CreateActorSprites(5, m_RunModeSprites);
+  factory.CreateActorSprites(6, m_AboutToStopRunModeSprites);
 }
 
 Ghost::~Ghost()
@@ -20,9 +28,41 @@ Ghost::~Ghost()
     delete m_Modes[i];
 }
 
+void Ghost::ChangeMode(GhostMode::Mode mode, float startTime)
+{
+  m_Mode = m_Modes[mode];
+  m_Mode->Reset(startTime);
+}
+
+void Ghost::SetToRunMode()
+{
+  m_Mode = m_Modes[GhostMode::ABOUT_TO_RUN];
+}
+
+void Ghost::SetDefaultSprites()
+{
+  m_CurrentSpritesArray = &m_Sprites;
+}
+
+void Ghost::SetRunModeSprites()
+{
+  m_CurrentSpritesArray = &m_RunModeSprites;
+}
+
+void Ghost::Flicker()
+{
+  m_CurrentSpritesArray = m_CurrentSpritesArray == &m_RunModeSprites ?
+    &m_AboutToStopRunModeSprites : &m_RunModeSprites;
+}
+
 const sf::Vector2i& Ghost::GetTargetTile() const
 {
   return m_Game.m_Pacman.GetPosition();
+}
+
+const sf::Vector2i& Ghost::GetScatterTargetTile() const
+{
+  return m_ScatterTargetTile;
 }
 
 int Ghost::GetDistanceToTarget(const sf::Vector2i& position) const
@@ -60,7 +100,7 @@ void Ghost::UpdatePosition(float elapsedTime)
   }
   else
   {
-    int minDistance = std::numeric_limits<int>::max();
+    int bestDistance = m_Mode->GetInitialDistance();
     for (int i = 0; i < 4; ++i)
     {
       sf::Vector2i position = m_Position + STEP[i];
@@ -72,9 +112,9 @@ void Ghost::UpdatePosition(float elapsedTime)
         continue;
 
       int distance = GetDistanceToTarget(position);
-      if (minDistance > distance)
+      if (m_Mode->CompareDistances(bestDistance, distance))
       {
-        minDistance = distance;
+        bestDistance = distance;
         m_NextPosition = position;
         m_Direction = Direction(i);
       }

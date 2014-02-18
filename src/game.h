@@ -17,6 +17,7 @@ public:
 
 private:
   void DrawText(const char* str, float x, float y);
+  void SetGhostsToRunMode();
 
   sf::RenderWindow m_Window;
   sf::Clock m_Clock;

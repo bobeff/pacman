@@ -28,6 +28,11 @@ void Game::DrawText(const char* str, float x, float y)
   m_Window.draw(m_Text);
 }
 
+void Game::SetGhostsToRunMode()
+{
+  m_Ghost.SetToRunMode();
+}
+
 int Game::Run()
 {
   while (m_Window.isOpen())

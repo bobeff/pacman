@@ -11,6 +11,7 @@ Actor::Actor(Game& game, const sf::Vector2i& startPosition, int imagesIndex, flo
   , m_NextPosition(m_Position)
   , m_Direction(Direction::WEST)
   , m_AnimationStage(1)
+  , m_CurrentSpritesArray(&m_Sprites)
 {
   SpriteFactory::Get().CreateActorSprites(imagesIndex, m_Sprites);
   SetCurrentSprite();
@@ -23,7 +24,7 @@ void Actor::Draw() const
 
 void Actor::SetCurrentSprite()
 {
-  m_CurrentSprite = &(m_Sprites[int(m_Direction)][m_AnimationStage]);
+  m_CurrentSprite = &((*m_CurrentSpritesArray)[int(m_Direction)][m_AnimationStage]);
   Maze::SetSpritePosition(*m_CurrentSprite, m_Position);
 }
 
@@ -42,11 +43,11 @@ void Actor::UpdateAnimation(float deltaTime)
 
   switch (m_Direction)
   {
-  case Direction::WEST:  position.x -= deltaMove; break;
-  case Direction::EAST:  position.x += deltaMove; break;
-  case Direction::NORTH: position.y -= deltaMove; break;
-  case Direction::SOUTH: position.y += deltaMove; break;
-  default: assert(0);
+    case Direction::WEST:  position.x -= deltaMove; break;
+    case Direction::EAST:  position.x += deltaMove; break;
+    case Direction::NORTH: position.y -= deltaMove; break;
+    case Direction::SOUTH: position.y += deltaMove; break;
+    default: assert(0);
   }
 
   Maze::SetSpritePosition(*m_CurrentSprite, position);

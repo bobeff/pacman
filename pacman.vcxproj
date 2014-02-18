@@ -154,7 +154,7 @@
     <ClCompile Include="src\actor.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\ghost.cpp" />
-    <ClCompile Include="src\ghost_mode.cpp" />
+    <ClCompile Include="src\ghost_modes.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\maze.cpp" />
     <ClCompile Include="src\pacman.cpp" />
@@ -170,7 +170,7 @@
     <ClInclude Include="src\actor.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\ghost.h" />
-    <ClInclude Include="src\ghost_mode.h" />
+    <ClInclude Include="src\ghost_modes.h" />
     <ClInclude Include="src\maze.h" />
     <ClInclude Include="src\pacman.h" />
     <ClInclude Include="src\pch.h" />

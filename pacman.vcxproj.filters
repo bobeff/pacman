@@ -39,7 +39,7 @@
     <ClCompile Include="src\actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ghost_mode.cpp">
+    <ClCompile Include="src\ghost_modes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,7 +65,7 @@
     <ClInclude Include="src\actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ghost_mode.h">
+    <ClInclude Include="src\ghost_modes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

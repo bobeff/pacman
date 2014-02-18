@@ -1,19 +1,25 @@
 #pragma once
 
 #include "actor.h"
-#include "ghost_mode.h"
+#include "ghost_modes.h"
 
 class Ghost : public Actor
 {
-  friend class ChaseMode;
-  friend class ScatterMode;
 public:
   Ghost(Game& game, const sf::Vector2i& startPosition,
     const sf::Vector2i& target, int spritesIndex);
   virtual ~Ghost();
 
-private:
   const sf::Vector2i& GetTargetTile() const;
+  const sf::Vector2i& GetScatterTargetTile() const;
+
+  void ChangeMode(GhostMode::Mode mode, float startTime);
+  void SetToRunMode();
+  void SetDefaultSprites();
+  void SetRunModeSprites();
+  void Flicker();
+
+private:
   int GetDistanceToTarget(const sf::Vector2i& position) const;
   bool IsMovePossible(const sf::Vector2i& position) const;
   virtual void UpdatePosition(float elapsedTime);
@@ -23,4 +29,7 @@ private:
 
   GhostMode* m_Modes[GhostMode::MODES_COUNT];
   GhostMode* m_Mode;
+
+  ActorSprites m_RunModeSprites;
+  ActorSprites m_AboutToStopRunModeSprites;
 };

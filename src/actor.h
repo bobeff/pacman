@@ -34,6 +34,7 @@ protected:
   // for each direction and each animation state
   typedef sf::Sprite ActorSprites[4][2];
   ActorSprites m_Sprites;
+  ActorSprites* m_CurrentSpritesArray;
 
   float m_PreviousTime;
   float m_MoveTimeInterval;
