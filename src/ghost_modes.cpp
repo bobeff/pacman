@@ -70,36 +70,6 @@ bool ScatterMode::CompareDistances(int dist1, int dist2) const
   return dist1 > dist2;
 }
 
-void AboutToRunMode::Reset(float startTime)
-{
-  assert(0);
-}
-
-bool AboutToRunMode::Change(float elapsedTime)
-{
-  m_Ghost.ChangeMode(RUN, elapsedTime);
-  return true;
-}
-
-int AboutToRunMode::GetInitialDistance() const
-{
-  assert(0);
-  return 0;
-}
-
-const sf::Vector2i& AboutToRunMode::GetTargetTile() const
-{
-  assert(0);
-  static const sf::Vector2i ZERO;
-  return ZERO;
-}
-
-bool AboutToRunMode::CompareDistances(int dist1, int dist2) const
-{
-  assert(0);
-  return false;
-}
-
 void RunMode::Reset(float startTime)
 {
   m_StartTime = startTime;
@@ -108,9 +78,18 @@ void RunMode::Reset(float startTime)
 
 bool RunMode::Change(float elapsedTime)
 {
+  static bool isFirstCheck = true;
+  
+  if (isFirstCheck)
+  {
+    isFirstCheck = false;
+    return true;
+  }
+
   float deltaTime = elapsedTime - m_StartTime;
   if (deltaTime < RUN_TIME) return false;
   m_Ghost.ChangeMode(ABOUT_TO_STOP_RUN, elapsedTime);
+  isFirstCheck = true;
   return false;
 }
 

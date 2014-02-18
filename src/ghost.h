@@ -14,7 +14,6 @@ public:
   const sf::Vector2i& GetScatterTargetTile() const;
 
   void ChangeMode(GhostMode::Mode mode, float startTime);
-  void SetToRunMode();
   void SetDefaultSprites();
   void SetRunModeSprites();
   void Flicker();

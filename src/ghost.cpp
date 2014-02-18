@@ -12,7 +12,6 @@ Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& 
 {
   m_Modes[GhostMode::CHASE] = new ChaseMode(*this);
   m_Modes[GhostMode::SCATTER] = new ScatterMode(*this);
-  m_Modes[GhostMode::ABOUT_TO_RUN] = new AboutToRunMode(*this);
   m_Modes[GhostMode::RUN] = new RunMode(*this);
   m_Modes[GhostMode::ABOUT_TO_STOP_RUN] = new AboutToStopRunMode(*this);
   m_Mode = m_Modes[GhostMode::CHASE];
@@ -32,11 +31,6 @@ void Ghost::ChangeMode(GhostMode::Mode mode, float startTime)
 {
   m_Mode = m_Modes[mode];
   m_Mode->Reset(startTime);
-}
-
-void Ghost::SetToRunMode()
-{
-  m_Mode = m_Modes[GhostMode::ABOUT_TO_RUN];
 }
 
 void Ghost::SetDefaultSprites()

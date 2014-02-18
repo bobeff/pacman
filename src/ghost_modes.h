@@ -9,7 +9,6 @@ public:
   {
     CHASE,
     SCATTER,
-    ABOUT_TO_RUN,
     RUN,
     ABOUT_TO_STOP_RUN,
     MODES_COUNT,
@@ -41,7 +40,6 @@ protected:
 
 DECLARE_MODE_CLASS(ChaseMode)
 DECLARE_MODE_CLASS(ScatterMode)
-DECLARE_MODE_CLASS(AboutToRunMode)
 DECLARE_MODE_CLASS(RunMode)
 DECLARE_MODE_CLASS(AboutToStopRunMode);
 
