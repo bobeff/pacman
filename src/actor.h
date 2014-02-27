@@ -39,6 +39,7 @@ protected:
   float m_PreviousTime;
   float m_MoveTimeInterval;
 
+  sf::Vector2i m_StartPosition;
   sf::Vector2i m_Position;
   sf::Vector2i m_NextPosition;
 

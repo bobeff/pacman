@@ -14,11 +14,13 @@ Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& 
   m_Modes[GhostMode::SCATTER] = new ScatterMode(*this);
   m_Modes[GhostMode::RUN] = new RunMode(*this);
   m_Modes[GhostMode::ABOUT_TO_STOP_RUN] = new AboutToStopRunMode(*this);
+  m_Modes[GhostMode::RESET] = new ResetMode(*this);
   m_Mode = m_Modes[GhostMode::CHASE];
 
   SpriteFactory& factory = SpriteFactory::Get();
   factory.CreateActorSprites(5, m_RunModeSprites);
   factory.CreateActorSprites(6, m_AboutToStopRunModeSprites);
+  factory.CreateActorSprites(7, m_ResetModeSprites);
 }
 
 Ghost::~Ghost()
@@ -43,15 +45,30 @@ void Ghost::SetRunModeSprites()
   m_CurrentSpritesArray = &m_RunModeSprites;
 }
 
+void Ghost::SetResetModeSprites()
+{
+  m_CurrentSpritesArray = &m_ResetModeSprites;
+}
+
 void Ghost::Flicker()
 {
   m_CurrentSpritesArray = m_CurrentSpritesArray == &m_RunModeSprites ?
     &m_AboutToStopRunModeSprites : &m_RunModeSprites;
 }
 
+GhostMode::Mode Ghost::GetMode() const
+{
+  return m_Mode->GetModeID();
+}
+
 const sf::Vector2i& Ghost::GetTargetTile() const
 {
   return m_Game.m_Pacman.GetPosition();
+}
+
+const sf::Vector2i& Ghost::GetStartTile() const
+{
+  return m_StartPosition;
 }
 
 const sf::Vector2i& Ghost::GetScatterTargetTile() const
@@ -76,6 +93,10 @@ bool Ghost::IsMovePossible(const sf::Vector2i& position) const
 
 void Ghost::UpdatePosition(float elapsedTime)
 {
+  const sf::Vector2i& pacmanPosition = m_Game.m_Pacman.GetPosition();
+  if (pacmanPosition == m_Position || pacmanPosition == m_NextPosition)
+    m_Mode->OnCollisionWithPacman();
+
   m_CameFrom = m_Position;
   m_Position = m_NextPosition;
 
@@ -114,6 +135,9 @@ void Ghost::UpdatePosition(float elapsedTime)
       }
     }
   }
+
+  if (pacmanPosition == m_NextPosition)
+    m_Mode->OnCollisionWithPacman();
 
   ++m_AnimationStage %= 2;
   SetCurrentSprite();

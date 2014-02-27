@@ -10,12 +10,16 @@ public:
     const sf::Vector2i& target, int spritesIndex);
   virtual ~Ghost();
 
+  GhostMode::Mode GetMode() const;
+
   const sf::Vector2i& GetTargetTile() const;
+  const sf::Vector2i& GetStartTile() const;
   const sf::Vector2i& GetScatterTargetTile() const;
 
   void ChangeMode(GhostMode::Mode mode, float startTime);
   void SetDefaultSprites();
   void SetRunModeSprites();
+  void SetResetModeSprites();
   void Flicker();
 
 private:
@@ -31,4 +35,5 @@ private:
 
   ActorSprites m_RunModeSprites;
   ActorSprites m_AboutToStopRunModeSprites;
+  ActorSprites m_ResetModeSprites;
 };

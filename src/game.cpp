@@ -30,7 +30,8 @@ void Game::DrawText(const char* str, float x, float y)
 
 void Game::SetGhostsToRunMode()
 {
-  m_Ghost.ChangeMode(GhostMode::RUN, m_Clock.getElapsedTime().asSeconds());
+  if (m_Ghost.GetMode() != GhostMode::RESET)
+    m_Ghost.ChangeMode(GhostMode::RUN, m_Clock.getElapsedTime().asSeconds());
 }
 
 int Game::Run()

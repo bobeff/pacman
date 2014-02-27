@@ -7,11 +7,14 @@ static const float SCATTER_TIME = 10.f;
 static const float RUN_TIME = 15.f;
 static const float ABOUT_TO_STOP_RUN_TIME = 5.f;
 
-GhostMode::GhostMode(Ghost& ghost)
+GhostMode::GhostMode(Ghost& ghost, Mode mode)
   : m_Ghost(ghost)
+  , m_Mode(mode)
   , m_StartTime(0.f)
 {
 }
+
+// ------------------- ChaseMode methods -------------------------------------
 
 void ChaseMode::Reset(float startTime)
 {
@@ -42,6 +45,12 @@ bool ChaseMode::CompareDistances(int dist1, int dist2) const
   return dist1 > dist2;
 }
 
+void ChaseMode::OnCollisionWithPacman() const
+{
+}
+
+// ------------------- ScatterMode methods -----------------------------------
+
 void ScatterMode::Reset(float startTime)
 {
   m_StartTime = startTime;
@@ -69,6 +78,12 @@ bool ScatterMode::CompareDistances(int dist1, int dist2) const
 {
   return dist1 > dist2;
 }
+
+void ScatterMode::OnCollisionWithPacman() const
+{
+}
+
+// ------------------- RunMode methods ---------------------------------------
 
 void RunMode::Reset(float startTime)
 {
@@ -108,6 +123,13 @@ bool RunMode::CompareDistances(int dist1, int dist2) const
   return dist1 < dist2;
 }
 
+void RunMode::OnCollisionWithPacman() const
+{
+  m_Ghost.ChangeMode(RESET, 0);
+}
+
+// ------------------- AboutToStopRunMode methods ----------------------------
+
 void AboutToStopRunMode::Reset(float startTime)
 {
   m_StartTime = startTime;
@@ -135,4 +157,43 @@ int AboutToStopRunMode::GetInitialDistance() const
 bool AboutToStopRunMode::CompareDistances(int dist1, int dist2) const
 {
   return dist1 < dist2;
+}
+
+void AboutToStopRunMode::OnCollisionWithPacman() const
+{
+  m_Ghost.ChangeMode(RESET, 0);
+}
+
+// ------------------- ResetMode methods -------------------------------------
+
+void ResetMode::Reset(float startTime)
+{
+  m_Ghost.SetResetModeSprites();
+}
+
+bool ResetMode::Change(float elapsedTime)
+{
+  if (m_Ghost.GetPosition() != m_Ghost.GetStartTile())
+    return false;
+  m_Ghost.ChangeMode(CHASE, elapsedTime);
+  return true;
+}
+
+const sf::Vector2i& ResetMode::GetTargetTile() const
+{
+  return m_Ghost.GetStartTile();;
+}
+
+int ResetMode::GetInitialDistance() const
+{
+  return std::numeric_limits<int>::max();
+}
+
+bool ResetMode::CompareDistances(int dist1, int dist2) const
+{
+  return dist1 > dist2;
+}
+
+void ResetMode::OnCollisionWithPacman() const
+{
 }
