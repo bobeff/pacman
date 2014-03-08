@@ -17,6 +17,7 @@ public:
   const sf::Vector2i& GetScatterTargetTile() const;
 
   void ChangeMode(GhostMode::Mode mode, float startTime);
+  void ReverseDirection();
   void SetDefaultSprites();
   void SetRunModeSprites();
   void SetResetModeSprites();
@@ -32,6 +33,8 @@ private:
 
   GhostMode* m_Modes[GhostMode::ModesCount];
   GhostMode* m_Mode;
+
+  bool m_IsModeChanged;
 
   ActorSprites m_RunModeSprites;
   ActorSprites m_AboutToStopRunModeSprites;

@@ -20,11 +20,12 @@ public:
   Mode GetModeID() const { return m_Mode; }
 
   virtual void Reset(float startTime) = 0;
-  virtual bool Change(float elapsedTime) = 0;
+  virtual void TryToChange(float elapsedTime) = 0;
   virtual const sf::Vector2i& GetTargetTile() const = 0;
   virtual int GetInitialDistance() const = 0;
   virtual bool CompareDistances(int dist1, int dist2) const = 0;
   virtual void OnCollisionWithPacman() const = 0;
+  virtual void ReverseDirection() const = 0;
 
 protected:
   Ghost& m_Ghost;
@@ -37,11 +38,12 @@ class ModeName##Mode : public GhostMode { \
   public: \
     ModeName##Mode(Ghost& ghost) : GhostMode(ghost, ModeName) {} \
     virtual void Reset(float startTime); \
-    virtual bool Change(float elapsedTime); \
+    virtual void TryToChange(float elapsedTime); \
     virtual const sf::Vector2i& GetTargetTile() const; \
     virtual int GetInitialDistance() const; \
     virtual bool CompareDistances(int dist1, int dist2) const; \
     virtual void OnCollisionWithPacman() const; \
+    virtual void ReverseDirection() const; \
   };
 
 DECLARE_MODE_CLASS(Chase)

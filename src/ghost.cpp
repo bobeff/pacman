@@ -9,6 +9,7 @@ Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& 
   : Actor(game, startPosition, spritesIndex, MOVE_TIME)
   , m_CameFrom(startPosition)
   , m_ScatterTargetTile(target)
+  , m_IsModeChanged(false)
 {
   m_Modes[GhostMode::Chase] = new ChaseMode(*this);
   m_Modes[GhostMode::Scatter] = new ScatterMode(*this);
@@ -31,8 +32,18 @@ Ghost::~Ghost()
 
 void Ghost::ChangeMode(GhostMode::Mode mode, float startTime)
 {
-  m_Mode = m_Modes[mode];
+  if (m_Mode->GetModeID() != mode)
+  {
+    m_Mode = m_Modes[mode];
+    m_IsModeChanged = true;
+  }
   m_Mode->Reset(startTime);
+}
+
+void Ghost::ReverseDirection()
+{
+  m_NextPosition = m_CameFrom;
+  m_Direction = Direction((int(m_Direction) + 2) % 4);
 }
 
 void Ghost::SetDefaultSprites()
@@ -108,10 +119,12 @@ void Ghost::UpdatePosition(float elapsedTime)
     sf::Vector2i( 0, -1), // north
   };
 
-  if (m_Mode->Change(elapsedTime))
+  m_Mode->TryToChange(elapsedTime);
+
+  if (m_IsModeChanged)
   {
-    m_NextPosition = m_CameFrom;
-    m_Direction = Direction((int(m_Direction) + 2) % 4);
+    m_Mode->ReverseDirection();
+    m_IsModeChanged = false;
   }
   else
   {

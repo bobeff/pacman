@@ -22,12 +22,11 @@ void ChaseMode::Reset(float startTime)
   m_Ghost.SetDefaultSprites();
 }
 
-bool ChaseMode::Change(float elapsedTime)
+void ChaseMode::TryToChange(float elapsedTime)
 {
   float deltaTime = elapsedTime - m_StartTime;
-  if (deltaTime < CHASE_TIME) return false;
+  if (deltaTime < CHASE_TIME) return;
   m_Ghost.ChangeMode(Scatter, elapsedTime);
-  return true;
 }
 
 const sf::Vector2i& ChaseMode::GetTargetTile() const
@@ -49,6 +48,11 @@ void ChaseMode::OnCollisionWithPacman() const
 {
 }
 
+void ChaseMode::ReverseDirection() const
+{
+  m_Ghost.ReverseDirection();
+}
+
 // ------------------- ScatterMode methods -----------------------------------
 
 void ScatterMode::Reset(float startTime)
@@ -56,12 +60,11 @@ void ScatterMode::Reset(float startTime)
   m_StartTime = startTime;
 }
 
-bool ScatterMode::Change(float elapsedTime)
+void ScatterMode::TryToChange(float elapsedTime)
 {
   float deltaTime = elapsedTime - m_StartTime;
-  if (deltaTime < SCATTER_TIME) return false;
+  if (deltaTime < SCATTER_TIME) return;
   m_Ghost.ChangeMode(Chase, elapsedTime);
-  return true;
 }
 
 const sf::Vector2i& ScatterMode::GetTargetTile() const
@@ -83,6 +86,11 @@ void ScatterMode::OnCollisionWithPacman() const
 {
 }
 
+void ScatterMode::ReverseDirection() const
+{
+  m_Ghost.ReverseDirection();
+}
+
 // ------------------- RunMode methods ---------------------------------------
 
 void RunMode::Reset(float startTime)
@@ -91,21 +99,11 @@ void RunMode::Reset(float startTime)
   m_Ghost.SetRunModeSprites();
 }
 
-bool RunMode::Change(float elapsedTime)
+void RunMode::TryToChange(float elapsedTime)
 {
-  static bool isFirstCheck = true;
-  
-  if (isFirstCheck)
-  {
-    isFirstCheck = false;
-    return true;
-  }
-
   float deltaTime = elapsedTime - m_StartTime;
-  if (deltaTime < RUN_TIME) return false;
+  if (deltaTime < RUN_TIME) return;
   m_Ghost.ChangeMode(AboutToStopRun, elapsedTime);
-  isFirstCheck = true;
-  return false;
 }
 
 const sf::Vector2i& RunMode::GetTargetTile() const
@@ -128,6 +126,11 @@ void RunMode::OnCollisionWithPacman() const
   m_Ghost.ChangeMode(GoToReset, 0);
 }
 
+void RunMode::ReverseDirection() const
+{
+  m_Ghost.ReverseDirection();
+}
+
 // ------------------- AboutToStopRunMode methods ----------------------------
 
 void AboutToStopRunMode::Reset(float startTime)
@@ -135,13 +138,12 @@ void AboutToStopRunMode::Reset(float startTime)
   m_StartTime = startTime;
 }
 
-bool AboutToStopRunMode::Change(float elapsedTime)
+void AboutToStopRunMode::TryToChange(float elapsedTime)
 {
   m_Ghost.Flicker();
   float deltaTime = elapsedTime - m_StartTime;
-  if (deltaTime < ABOUT_TO_STOP_RUN_TIME) return false;
+  if (deltaTime < ABOUT_TO_STOP_RUN_TIME) return;
   m_Ghost.ChangeMode(Chase, elapsedTime);
-  return true;
 }
 
 const sf::Vector2i& AboutToStopRunMode::GetTargetTile() const
@@ -164,6 +166,10 @@ void AboutToStopRunMode::OnCollisionWithPacman() const
   m_Ghost.ChangeMode(GoToReset, 0);
 }
 
+void AboutToStopRunMode::ReverseDirection() const
+{
+}
+
 // ------------------- ResetMode methods -------------------------------------
 
 void GoToResetMode::Reset(float startTime)
@@ -171,12 +177,10 @@ void GoToResetMode::Reset(float startTime)
   m_Ghost.SetResetModeSprites();
 }
 
-bool GoToResetMode::Change(float elapsedTime)
+void GoToResetMode::TryToChange(float elapsedTime)
 {
-  if (m_Ghost.GetPosition() != m_Ghost.GetStartTile())
-    return false;
+  if (m_Ghost.GetPosition() != m_Ghost.GetStartTile()) return;
   m_Ghost.ChangeMode(Chase, elapsedTime);
-  return true;
 }
 
 const sf::Vector2i& GoToResetMode::GetTargetTile() const
@@ -195,5 +199,9 @@ bool GoToResetMode::CompareDistances(int dist1, int dist2) const
 }
 
 void GoToResetMode::OnCollisionWithPacman() const
+{
+}
+
+void GoToResetMode::ReverseDirection() const
 {
 }
