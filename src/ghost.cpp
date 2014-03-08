@@ -10,12 +10,12 @@ Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& 
   , m_CameFrom(startPosition)
   , m_ScatterTargetTile(target)
 {
-  m_Modes[GhostMode::CHASE] = new ChaseMode(*this);
-  m_Modes[GhostMode::SCATTER] = new ScatterMode(*this);
-  m_Modes[GhostMode::RUN] = new RunMode(*this);
-  m_Modes[GhostMode::ABOUT_TO_STOP_RUN] = new AboutToStopRunMode(*this);
-  m_Modes[GhostMode::RESET] = new ResetMode(*this);
-  m_Mode = m_Modes[GhostMode::CHASE];
+  m_Modes[GhostMode::Chase] = new ChaseMode(*this);
+  m_Modes[GhostMode::Scatter] = new ScatterMode(*this);
+  m_Modes[GhostMode::Run] = new RunMode(*this);
+  m_Modes[GhostMode::AboutToStopRun] = new AboutToStopRunMode(*this);
+  m_Modes[GhostMode::GoToReset] = new GoToResetMode(*this);
+  m_Mode = m_Modes[GhostMode::Chase];
 
   SpriteFactory& factory = SpriteFactory::Get();
   factory.CreateActorSprites(5, m_RunModeSprites);
@@ -25,7 +25,7 @@ Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& 
 
 Ghost::~Ghost()
 {
-  for (int i = 0; i < GhostMode::MODES_COUNT; ++i)
+  for (int i = 0; i < GhostMode::ModesCount; ++i)
     delete m_Modes[i];
 }
 

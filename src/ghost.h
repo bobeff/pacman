@@ -30,7 +30,7 @@ private:
   sf::Vector2i m_CameFrom;
   sf::Vector2i m_ScatterTargetTile;
 
-  GhostMode* m_Modes[GhostMode::MODES_COUNT];
+  GhostMode* m_Modes[GhostMode::ModesCount];
   GhostMode* m_Mode;
 
   ActorSprites m_RunModeSprites;

@@ -26,7 +26,7 @@ bool ChaseMode::Change(float elapsedTime)
 {
   float deltaTime = elapsedTime - m_StartTime;
   if (deltaTime < CHASE_TIME) return false;
-  m_Ghost.ChangeMode(SCATTER, elapsedTime);
+  m_Ghost.ChangeMode(Scatter, elapsedTime);
   return true;
 }
 
@@ -60,7 +60,7 @@ bool ScatterMode::Change(float elapsedTime)
 {
   float deltaTime = elapsedTime - m_StartTime;
   if (deltaTime < SCATTER_TIME) return false;
-  m_Ghost.ChangeMode(CHASE, elapsedTime);
+  m_Ghost.ChangeMode(Chase, elapsedTime);
   return true;
 }
 
@@ -103,7 +103,7 @@ bool RunMode::Change(float elapsedTime)
 
   float deltaTime = elapsedTime - m_StartTime;
   if (deltaTime < RUN_TIME) return false;
-  m_Ghost.ChangeMode(ABOUT_TO_STOP_RUN, elapsedTime);
+  m_Ghost.ChangeMode(AboutToStopRun, elapsedTime);
   isFirstCheck = true;
   return false;
 }
@@ -125,7 +125,7 @@ bool RunMode::CompareDistances(int dist1, int dist2) const
 
 void RunMode::OnCollisionWithPacman() const
 {
-  m_Ghost.ChangeMode(RESET, 0);
+  m_Ghost.ChangeMode(GoToReset, 0);
 }
 
 // ------------------- AboutToStopRunMode methods ----------------------------
@@ -140,7 +140,7 @@ bool AboutToStopRunMode::Change(float elapsedTime)
   m_Ghost.Flicker();
   float deltaTime = elapsedTime - m_StartTime;
   if (deltaTime < ABOUT_TO_STOP_RUN_TIME) return false;
-  m_Ghost.ChangeMode(CHASE, elapsedTime);
+  m_Ghost.ChangeMode(Chase, elapsedTime);
   return true;
 }
 
@@ -161,39 +161,39 @@ bool AboutToStopRunMode::CompareDistances(int dist1, int dist2) const
 
 void AboutToStopRunMode::OnCollisionWithPacman() const
 {
-  m_Ghost.ChangeMode(RESET, 0);
+  m_Ghost.ChangeMode(GoToReset, 0);
 }
 
 // ------------------- ResetMode methods -------------------------------------
 
-void ResetMode::Reset(float startTime)
+void GoToResetMode::Reset(float startTime)
 {
   m_Ghost.SetResetModeSprites();
 }
 
-bool ResetMode::Change(float elapsedTime)
+bool GoToResetMode::Change(float elapsedTime)
 {
   if (m_Ghost.GetPosition() != m_Ghost.GetStartTile())
     return false;
-  m_Ghost.ChangeMode(CHASE, elapsedTime);
+  m_Ghost.ChangeMode(Chase, elapsedTime);
   return true;
 }
 
-const sf::Vector2i& ResetMode::GetTargetTile() const
+const sf::Vector2i& GoToResetMode::GetTargetTile() const
 {
   return m_Ghost.GetStartTile();;
 }
 
-int ResetMode::GetInitialDistance() const
+int GoToResetMode::GetInitialDistance() const
 {
   return std::numeric_limits<int>::max();
 }
 
-bool ResetMode::CompareDistances(int dist1, int dist2) const
+bool GoToResetMode::CompareDistances(int dist1, int dist2) const
 {
   return dist1 > dist2;
 }
 
-void ResetMode::OnCollisionWithPacman() const
+void GoToResetMode::OnCollisionWithPacman() const
 {
 }

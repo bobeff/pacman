@@ -7,12 +7,12 @@ class GhostMode
 public:
   enum Mode
   {
-    CHASE,
-    SCATTER,
-    RUN,
-    ABOUT_TO_STOP_RUN,
-    RESET,
-    MODES_COUNT,
+    Chase,
+    Scatter,
+    Run,
+    AboutToStopRun,
+    GoToReset,
+    ModesCount,
   };
 
   GhostMode(Ghost& ghost, Mode mode);
@@ -32,10 +32,10 @@ protected:
   float m_StartTime;
 };
 
-#define DECLARE_MODE_CLASS(ModeName, ModeID) \
-  class ModeName : public GhostMode { \
+#define DECLARE_MODE_CLASS(ModeName) \
+class ModeName##Mode : public GhostMode { \
   public: \
-    ModeName(Ghost& ghost) : GhostMode(ghost, ModeID) {} \
+    ModeName##Mode(Ghost& ghost) : GhostMode(ghost, ModeName) {} \
     virtual void Reset(float startTime); \
     virtual bool Change(float elapsedTime); \
     virtual const sf::Vector2i& GetTargetTile() const; \
@@ -44,10 +44,10 @@ protected:
     virtual void OnCollisionWithPacman() const; \
   };
 
-DECLARE_MODE_CLASS(ChaseMode, CHASE)
-DECLARE_MODE_CLASS(ScatterMode, SCATTER)
-DECLARE_MODE_CLASS(RunMode, RUN)
-DECLARE_MODE_CLASS(AboutToStopRunMode, ABOUT_TO_STOP_RUN);
-DECLARE_MODE_CLASS(ResetMode, RESET);
+DECLARE_MODE_CLASS(Chase)
+DECLARE_MODE_CLASS(Scatter)
+DECLARE_MODE_CLASS(Run)
+DECLARE_MODE_CLASS(AboutToStopRun)
+DECLARE_MODE_CLASS(GoToReset)
 
 #undef DECLARE_MODE_CLASS
