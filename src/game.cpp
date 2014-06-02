@@ -11,7 +11,8 @@ Game::Game()
   , m_TilesConsumed(0)
   , m_Score(0)
 {
-  m_Window.create(sf::VideoMode(448, 576), "Pacman", sf::Style::Titlebar | sf::Style::Close);
+  m_Window.create(sf::VideoMode(448, 576),
+    "Pacman", sf::Style::Titlebar | sf::Style::Close);
   m_Window.setVerticalSyncEnabled(true);
 
   m_Font.loadFromFile("assets/arial.ttf");

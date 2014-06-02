@@ -21,7 +21,8 @@ sf::Sprite SpriteFactory::CreatePacmanInitialSprite() const
   return CreateSprite(8, 0);
 }
 
-void SpriteFactory::CreateActorSprites(int actorIndex, sf::Sprite sprites[4][2]) const
+void SpriteFactory::CreateActorSprites(int actorIndex,
+  sf::Sprite sprites[4][2]) const
 {
   for (int i = 0; i < 8; ++i)
     sprites[i / 2][i % 2] = CreateSprite(i, actorIndex);

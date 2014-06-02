@@ -5,7 +5,8 @@
 
 static const float MOVE_TIME = .15f;
 
-Ghost::Ghost(Game& game, const sf::Vector2i& startPosition, const sf::Vector2i& target, int spritesIndex)
+Ghost::Ghost(Game& game, const sf::Vector2i& startPosition,
+  const sf::Vector2i& target, int spritesIndex)
   : Actor(game, startPosition, spritesIndex, MOVE_TIME)
   , m_CameFrom(startPosition)
   , m_ScatterTargetTile(target)

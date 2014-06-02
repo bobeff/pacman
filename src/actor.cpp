@@ -3,7 +3,8 @@
 #include "game.h"
 #include "sprite_factory.h"
 
-Actor::Actor(Game& game, const sf::Vector2i& startPosition, int imagesIndex, float moveTimeInterval)
+Actor::Actor(Game& game, const sf::Vector2i& startPosition, int imagesIndex,
+  float moveTimeInterval)
   : m_Game(game)
   , m_PreviousTime(0.f)
   , m_MoveTimeInterval(moveTimeInterval)
@@ -25,7 +26,8 @@ void Actor::Draw() const
 
 void Actor::SetCurrentSprite()
 {
-  m_CurrentSprite = &((*m_CurrentSpritesArray)[int(m_Direction)][m_AnimationStage]);
+  m_CurrentSprite =
+    &((*m_CurrentSpritesArray)[int(m_Direction)][m_AnimationStage]);
   Maze::SetSpritePosition(*m_CurrentSprite, m_Position);
 }
 
