@@ -16,6 +16,7 @@ public:
   };
 
   GhostMode(Ghost& ghost, Mode mode);
+  virtual ~GhostMode() {}
 
   Mode GetModeID() const { return m_Mode; }
 
