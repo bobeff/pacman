@@ -35,7 +35,9 @@ Ghost::~Ghost()
   delete m_Strategy;
 
   for (int i = 0; i < GhostMode::ModesCount; ++i)
+  {
     delete m_Modes[i];
+  }
 }
 
 void Ghost::ChangeMode(GhostMode::Mode mode, float startTime)
@@ -82,6 +84,7 @@ GhostMode::Mode Ghost::GetMode() const
 
 const sf::Vector2i& Ghost::GetTargetTile() const
 {
+  if (IsInHouse()) return sf::Vector2i(14, 14);
   return m_Strategy->GetTargetTile();
 }
 
@@ -107,14 +110,25 @@ bool Ghost::IsMovePossible(const sf::Vector2i& position) const
 {
   char tile = m_Game.m_Maze.GetTile(position);
   char tileCameFrom = m_Game.m_Maze.GetTile(m_CameFrom);
-  return tile != '#' && (tile != '-' || tile == '-' && tileCameFrom == '-');
+  if (tile == '-')
+  {
+    return tileCameFrom == '-' || GetMode() == GhostMode::GoToReset;
+  }
+  return tile != '#';
+}
+
+bool Ghost::IsInHouse() const
+{
+  return m_Game.m_Maze.GetTile(m_Position) == '-';
 }
 
 void Ghost::UpdatePosition(float elapsedTime)
 {
   const sf::Vector2i& pacmanPosition = m_Game.m_Pacman.GetPosition();
   if (pacmanPosition == m_Position || pacmanPosition == m_NextPosition)
+  {
     m_Mode->OnCollisionWithPacman();
+  }
 
   m_CameFrom = m_Position;
   m_Position = m_NextPosition;
@@ -158,7 +172,9 @@ void Ghost::UpdatePosition(float elapsedTime)
   }
 
   if (pacmanPosition == m_NextPosition)
+  {
     m_Mode->OnCollisionWithPacman();
+  }
 
   ++m_AnimationStage %= 2;
   SetCurrentSprite();

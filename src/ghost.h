@@ -8,6 +8,13 @@ class GhostStrategy;
 class Ghost : public Actor
 {
 public:
+  enum
+  {
+    RED_GHOST,
+    PINK_GHOST,
+    GHOSTS_COUNT
+  };
+
   Ghost(Game& game,
         const sf::Vector2i& startPosition,
         const sf::Vector2i& target,
@@ -32,6 +39,7 @@ public:
 private:
   int GetDistanceToTarget(const sf::Vector2i& position) const;
   bool IsMovePossible(const sf::Vector2i& position) const;
+  bool IsInHouse() const;
   virtual void UpdatePosition(float elapsedTime);
 
   sf::Vector2i m_CameFrom;
