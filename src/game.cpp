@@ -1,16 +1,26 @@
 #include "pch.h"
 #include "game.h"
+#include "ghost_startegies.h"
 
 static const sf::Vector2i RED_GHOST_START_TILE(14, 14);
 static const sf::Vector2i RED_GHOST_SCATTER_TARGET(25, 0);
+static const sf::Vector2i PINK_GHOST_START_TILE(13, 14);
+static const sf::Vector2i PINK_GHOST_SCATTER_TARGET(4, 0);
 
 Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
-  , m_Ghost(*this, RED_GHOST_START_TILE, RED_GHOST_SCATTER_TARGET, 1)
   , m_TilesConsumed(0)
   , m_Score(0)
 {
+  // the red ghost
+  m_Ghosts[0] = new Ghost(*this, RED_GHOST_START_TILE,
+    RED_GHOST_SCATTER_TARGET, new RedGhostStrategy(m_Pacman), 1);
+
+  // the pink ghost
+  m_Ghosts[1] = new Ghost(*this, PINK_GHOST_START_TILE,
+    PINK_GHOST_SCATTER_TARGET, new PinkGhostStrategy(m_Pacman), 3);
+
   m_Window.create(sf::VideoMode(448, 576),
     "Pacman", sf::Style::Titlebar | sf::Style::Close);
   m_Window.setVerticalSyncEnabled(true);
@@ -31,8 +41,14 @@ void Game::DrawText(const char* str, float x, float y)
 
 void Game::SetGhostsToRunMode()
 {
-  if (m_Ghost.GetMode() != GhostMode::GoToReset)
-    m_Ghost.ChangeMode(GhostMode::Run, m_Clock.getElapsedTime().asSeconds());
+  for (int i = 0; i < GHOSTS_COUNT; ++i)
+  {
+    if (m_Ghosts[i]->GetMode() != GhostMode::GoToReset)
+    {
+      m_Ghosts[i]->ChangeMode(GhostMode::Run,
+        m_Clock.getElapsedTime().asSeconds());
+    }
+  }
 }
 
 int Game::Run()
@@ -74,12 +90,14 @@ int Game::Run()
 
     float elapsedTime = m_Clock.getElapsedTime().asSeconds();
     m_Pacman.Update(elapsedTime);
-    m_Ghost.Update(elapsedTime);
+    for (int i = 0; i < GHOSTS_COUNT; ++i)
+      m_Ghosts[i]->Update(elapsedTime);
 
     m_Window.clear(sf::Color::Black);
     m_Maze.Draw();
     m_Pacman.Draw();
-    m_Ghost.Draw();
+    for (int i = 0; i < GHOSTS_COUNT; ++i)
+      m_Ghosts[i]->Draw();
 
     char scoreStr[16];
     sprintf(scoreStr, "Score: %d", m_Score);

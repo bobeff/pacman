@@ -108,7 +108,7 @@ void RunMode::TryToChange(float elapsedTime)
 
 const sf::Vector2i& RunMode::GetTargetTile() const
 {
-  return m_Ghost.GetTargetTile();;
+  return m_Ghost.GetTargetTile();
 }
 
 int RunMode::GetInitialDistance() const
@@ -148,7 +148,7 @@ void AboutToStopRunMode::TryToChange(float elapsedTime)
 
 const sf::Vector2i& AboutToStopRunMode::GetTargetTile() const
 {
-  return m_Ghost.GetTargetTile();;
+  return m_Ghost.GetTargetTile();
 }
 
 int AboutToStopRunMode::GetInitialDistance() const

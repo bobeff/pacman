@@ -27,7 +27,9 @@ private:
 
   Maze m_Maze;
   Pacman m_Pacman;
-  Ghost m_Ghost;
+
+  static const sf::Uint8  GHOSTS_COUNT = 2;
+  Ghost* m_Ghosts[GHOSTS_COUNT];
 
   sf::Uint8  m_TilesConsumed;
   sf::Uint16 m_Score;

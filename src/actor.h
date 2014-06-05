@@ -21,6 +21,7 @@ public:
   void Draw() const;
   void Update(float elapsedTime);
   const sf::Vector2i& GetPosition() const;
+  Direction GetDirection() const;
 
 protected:
   void SetCurrentSprite();

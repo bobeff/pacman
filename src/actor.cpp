@@ -36,6 +36,11 @@ const sf::Vector2i& Actor::GetPosition() const
   return m_Position;
 }
 
+Direction Actor::GetDirection() const
+{
+  return m_Direction;
+}
+
 void Actor::UpdateAnimation(float deltaTime)
 {
   if (m_Position == m_NextPosition)

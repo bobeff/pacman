@@ -3,11 +3,17 @@
 #include "actor.h"
 #include "ghost_modes.h"
 
+class GhostStrategy;
+
 class Ghost : public Actor
 {
 public:
-  Ghost(Game& game, const sf::Vector2i& startPosition,
-    const sf::Vector2i& target, int spritesIndex);
+  Ghost(Game& game,
+        const sf::Vector2i& startPosition,
+        const sf::Vector2i& target,
+        const GhostStrategy* strategy,
+        int spritesIndex);
+
   virtual ~Ghost();
 
   GhostMode::Mode GetMode() const;
@@ -35,6 +41,8 @@ private:
   GhostMode* m_Mode;
 
   bool m_IsModeChanged;
+
+  const GhostStrategy* m_Strategy;
 
   ActorSprites m_RunModeSprites;
   ActorSprites m_AboutToStopRunModeSprites;

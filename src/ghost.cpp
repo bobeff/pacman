@@ -2,15 +2,20 @@
 #include "ghost.h"
 #include "game.h"
 #include "sprite_factory.h"
+#include "ghost_startegies.h"
 
 static const float MOVE_TIME = .15f;
 
-Ghost::Ghost(Game& game, const sf::Vector2i& startPosition,
-  const sf::Vector2i& target, int spritesIndex)
+Ghost::Ghost(Game& game,
+             const sf::Vector2i& startPosition,
+             const sf::Vector2i& target,
+             const GhostStrategy* strategy,
+             int spritesIndex)
   : Actor(game, startPosition, spritesIndex, MOVE_TIME)
   , m_CameFrom(startPosition)
   , m_ScatterTargetTile(target)
   , m_IsModeChanged(false)
+  , m_Strategy(strategy)
 {
   m_Modes[GhostMode::Chase] = new ChaseMode(*this);
   m_Modes[GhostMode::Scatter] = new ScatterMode(*this);
@@ -27,6 +32,8 @@ Ghost::Ghost(Game& game, const sf::Vector2i& startPosition,
 
 Ghost::~Ghost()
 {
+  delete m_Strategy;
+
   for (int i = 0; i < GhostMode::ModesCount; ++i)
     delete m_Modes[i];
 }
@@ -75,7 +82,7 @@ GhostMode::Mode Ghost::GetMode() const
 
 const sf::Vector2i& Ghost::GetTargetTile() const
 {
-  return m_Game.m_Pacman.GetPosition();
+  return m_Strategy->GetTargetTile();
 }
 
 const sf::Vector2i& Ghost::GetStartTile() const
