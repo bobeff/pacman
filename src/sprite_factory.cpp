@@ -42,4 +42,4 @@ SpriteFactory& SpriteFactory::Get()
   return *s_Instance;
 }
 
-SpriteFactory* SpriteFactory::s_Instance = nullptr;
+SpriteFactory* SpriteFactory::s_Instance = 0;

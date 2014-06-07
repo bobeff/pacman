@@ -72,7 +72,7 @@ void Maze::Draw()
       {
         case '.': sprite = &m_DotSprite; break;
         case '@': sprite = &m_EnergizerSprite; break;
-        default: sprite = nullptr;
+        default: sprite = 0;
       }
 
       if (!sprite) continue;

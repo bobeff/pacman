@@ -29,7 +29,6 @@ static void UpdatePosition(Direction direction, sf::Vector2i& position)
     case Direction::EAST:  ++position.x; break;
     case Direction::NORTH: --position.y; break;
     case Direction::SOUTH: ++position.y; break;
-    default: assert(0);
   }
 
   Maze::TruncatePosition(position);

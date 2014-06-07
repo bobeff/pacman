@@ -36,7 +36,7 @@ const sf::Vector2i& ChaseMode::GetTargetTile() const
 
 int ChaseMode::GetInitialDistance() const
 {
-  return std::numeric_limits<int>::max();
+  return INT_MAX;
 }
 
 bool ChaseMode::CompareDistances(int dist1, int dist2) const
@@ -74,7 +74,7 @@ const sf::Vector2i& ScatterMode::GetTargetTile() const
 
 int ScatterMode::GetInitialDistance() const
 {
-  return std::numeric_limits<int>::max();
+  return INT_MAX;
 }
 
 bool ScatterMode::CompareDistances(int dist1, int dist2) const
@@ -113,7 +113,7 @@ const sf::Vector2i& RunMode::GetTargetTile() const
 
 int RunMode::GetInitialDistance() const
 {
-  return std::numeric_limits<int>::min();
+  return INT_MIN;
 }
 
 bool RunMode::CompareDistances(int dist1, int dist2) const
@@ -153,7 +153,7 @@ const sf::Vector2i& AboutToStopRunMode::GetTargetTile() const
 
 int AboutToStopRunMode::GetInitialDistance() const
 {
-  return std::numeric_limits<int>::min();
+  return INT_MIN;
 }
 
 bool AboutToStopRunMode::CompareDistances(int dist1, int dist2) const
@@ -190,7 +190,7 @@ const sf::Vector2i& GoToResetMode::GetTargetTile() const
 
 int GoToResetMode::GetInitialDistance() const
 {
-  return std::numeric_limits<int>::max();
+  return INT_MAX;
 }
 
 bool GoToResetMode::CompareDistances(int dist1, int dist2) const

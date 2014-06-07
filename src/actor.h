@@ -2,7 +2,7 @@
 
 class Game;
 
-enum class Direction
+enum Direction
 {
   EAST,
   SOUTH,
