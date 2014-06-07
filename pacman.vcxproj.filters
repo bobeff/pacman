@@ -42,7 +42,7 @@
     <ClCompile Include="src\ghost_modes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ghost_startegies.cpp">
+    <ClCompile Include="src\ghost_strategies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,7 +71,7 @@
     <ClInclude Include="src\ghost_modes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ghost_startegies.h">
+    <ClInclude Include="src\ghost_strategies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,14 +2,13 @@
 #include "ghost.h"
 #include "game.h"
 #include "sprite_factory.h"
-#include "ghost_startegies.h"
 
 static const float MOVE_TIME = .15f;
 
 Ghost::Ghost(Game& game,
              const sf::Vector2i& startPosition,
              const sf::Vector2i& target,
-             const GhostStrategy* strategy,
+             GhostStrategy strategy,
              int spritesIndex)
   : Actor(game, startPosition, spritesIndex, MOVE_TIME)
   , m_CameFrom(startPosition)
@@ -32,8 +31,6 @@ Ghost::Ghost(Game& game,
 
 Ghost::~Ghost()
 {
-  delete m_Strategy;
-
   for (int i = 0; i < GhostMode::ModesCount; ++i)
   {
     delete m_Modes[i];
@@ -82,10 +79,10 @@ GhostMode::Mode Ghost::GetMode() const
   return m_Mode->GetModeID();
 }
 
-const sf::Vector2i& Ghost::GetTargetTile() const
+sf::Vector2i Ghost::GetTargetTile() const
 {
   if (IsInHouse()) return sf::Vector2i(14, 14);
-  return m_Strategy->GetTargetTile();
+  return m_Strategy(m_Game);
 }
 
 const sf::Vector2i& Ghost::GetStartTile() const

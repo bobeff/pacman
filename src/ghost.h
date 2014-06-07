@@ -3,29 +3,31 @@
 #include "actor.h"
 #include "ghost_modes.h"
 
-class GhostStrategy;
+typedef sf::Vector2i(*GhostStrategy)(const Game& game);
 
 class Ghost : public Actor
 {
 public:
   enum
   {
-    RED_GHOST,
-    PINK_GHOST,
-    GHOSTS_COUNT
+    RED,
+    BLUE,
+    PINK,
+    ORANGE,
+    COUNT,
   };
 
   Ghost(Game& game,
         const sf::Vector2i& startPosition,
         const sf::Vector2i& target,
-        const GhostStrategy* strategy,
+        GhostStrategy strategy,
         int spritesIndex);
 
   virtual ~Ghost();
 
   GhostMode::Mode GetMode() const;
 
-  const sf::Vector2i& GetTargetTile() const;
+  sf::Vector2i GetTargetTile() const;
   const sf::Vector2i& GetStartTile() const;
   const sf::Vector2i& GetScatterTargetTile() const;
 
@@ -50,7 +52,7 @@ private:
 
   bool m_IsModeChanged;
 
-  const GhostStrategy* m_Strategy;
+  GhostStrategy m_Strategy;
 
   ActorSprites m_RunModeSprites;
   ActorSprites m_AboutToStopRunModeSprites;

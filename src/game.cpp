@@ -1,11 +1,6 @@
 #include "pch.h"
 #include "game.h"
-#include "ghost_startegies.h"
-
-static const sf::Vector2i RED_GHOST_START_TILE(14, 17);
-static const sf::Vector2i RED_GHOST_SCATTER_TARGET(25, 0);
-static const sf::Vector2i PINK_GHOST_START_TILE(13, 17);
-static const sf::Vector2i PINK_GHOST_SCATTER_TARGET(4, 0);
+#include "ghost_strategies.h"
 
 Game::Game()
   : m_Maze(*this)
@@ -13,11 +8,17 @@ Game::Game()
   , m_TilesConsumed(0)
   , m_Score(0)
 {
-  m_Ghosts[Ghost::RED_GHOST] = new Ghost(*this, RED_GHOST_START_TILE,
-    RED_GHOST_SCATTER_TARGET, new RedGhostStrategy(m_Pacman), 1);
+  m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,
+    RED_GHOST_SCATTER_TARGET, RedGhostStrategy, 1);
 
-  m_Ghosts[Ghost::PINK_GHOST] = new Ghost(*this, PINK_GHOST_START_TILE,
-    PINK_GHOST_SCATTER_TARGET, new PinkGhostStrategy(m_Pacman), 3);
+  m_Ghosts[Ghost::BLUE] = new Ghost(*this, BLUE_GHOST_START_TILE,
+    BLUE_GHOST_SCATTER_TARGET, BlueGhostStrategy, 2);
+
+  m_Ghosts[Ghost::PINK] = new Ghost(*this, PINK_GHOST_START_TILE,
+    PINK_GHOST_SCATTER_TARGET, PinkGhostStrategy, 3);
+
+  m_Ghosts[Ghost::ORANGE] = new Ghost(*this, ORANGE_GHOST_START_TILE,
+    ORANGE_GHOST_SCATTER_TARGET, OrangeGhostStrategy, 4);
 
   m_Window.create(sf::VideoMode(448, 576),
     "Pacman", sf::Style::Titlebar | sf::Style::Close);
@@ -39,7 +40,7 @@ void Game::DrawText(const char* str, float x, float y)
 
 void Game::SetGhostsToRunMode()
 {
-  for (int i = 0; i < Ghost::GHOSTS_COUNT; ++i)
+  for (int i = 0; i < Ghost::COUNT; ++i)
   {
     if (m_Ghosts[i]->GetMode() != GhostMode::GoToReset)
     {
@@ -88,7 +89,7 @@ int Game::Run()
 
     float elapsedTime = m_Clock.getElapsedTime().asSeconds();
     m_Pacman.Update(elapsedTime);
-    for (int i = 0; i < Ghost::GHOSTS_COUNT; ++i)
+    for (int i = 0; i < Ghost::COUNT; ++i)
     {
       m_Ghosts[i]->Update(elapsedTime);
     }
@@ -96,7 +97,7 @@ int Game::Run()
     m_Window.clear(sf::Color::Black);
     m_Maze.Draw();
     m_Pacman.Draw();
-    for (int i = 0; i < Ghost::GHOSTS_COUNT; ++i)
+    for (int i = 0; i < Ghost::COUNT; ++i)
     {
       m_Ghosts[i]->Draw();
     }

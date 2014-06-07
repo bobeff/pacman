@@ -11,6 +11,11 @@ class Game
   friend class Pacman;
   friend class Ghost;
 
+  friend sf::Vector2i RedGhostStrategy(const Game& game);
+  friend sf::Vector2i BlueGhostStrategy(const Game& game);
+  friend sf::Vector2i PinkGhostStrategy(const Game& game);
+  friend sf::Vector2i OrangeGhostStrategy(const Game& game);
+
 public:
   Game();
   int Run();
@@ -28,7 +33,7 @@ private:
   Maze m_Maze;
   Pacman m_Pacman;
 
-  Ghost* m_Ghosts[Ghost::GHOSTS_COUNT];
+  Ghost* m_Ghosts[Ghost::COUNT];
 
   sf::Uint8  m_TilesConsumed;
   sf::Uint16 m_Score;
