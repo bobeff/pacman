@@ -21,10 +21,10 @@ static sf::Vector2i GetPositionBefore(const Pacman& pacman, int tilesCount)
 
   switch (dir)
   {
-  case Direction::EAST:  result -= sf::Vector2i(tilesCount, 0);
-  case Direction::WEST:  result += sf::Vector2i(tilesCount, 0);
-  case Direction::NORTH: result -= sf::Vector2i(0, tilesCount);
-  case Direction::SOUTH: result += sf::Vector2i(0, tilesCount);
+  case Direction::EAST:  result += sf::Vector2i(tilesCount, 0); break;
+  case Direction::WEST:  result -= sf::Vector2i(tilesCount, 0); break;
+  case Direction::NORTH: result -= sf::Vector2i(0, tilesCount); break;
+  case Direction::SOUTH: result += sf::Vector2i(0, tilesCount); break;
   }
 
   return result;
