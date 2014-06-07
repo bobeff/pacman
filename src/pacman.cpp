@@ -18,7 +18,7 @@ Pacman::Pacman(Game& game)
 void Pacman::SetInitialSpriteAsCurrent()
 {
   m_CurrentSprite = &m_InitialSprite;
-  Maze::SetSpritePosition(*m_CurrentSprite, m_Position);
+  Maze::SetPosition(*m_CurrentSprite, m_Position);
 }
 
 static void UpdatePosition(Direction direction, sf::Vector2i& position)

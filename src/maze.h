@@ -10,13 +10,13 @@ public:
   void ConsumeTile(const sf::Vector2i& position);
   char GetTile(const sf::Vector2i& position) const;
 
-  static void SetSpritePosition(sf::Sprite& sprite, int x, int y);
-  static void SetSpritePosition(sf::Sprite& sprite, float x, float y);
+  static void SetPosition(sf::Transformable& object, int x, int y);
+  static void SetPosition(sf::Transformable& object, float x, float y);
  
-  static void SetSpritePosition(sf::Sprite& sprite,
+  static void SetPosition(sf::Transformable& object,
     const sf::Vector2i& position);
   
-  static void SetSpritePosition(sf::Sprite& sprite,
+  static void SetPosition(sf::Transformable& object,
     const sf::Vector2f& position);
   
   static void TruncatePosition(sf::Vector2i& position);

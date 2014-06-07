@@ -18,7 +18,7 @@ public:
     int imagesIndex, float moveTimeInterval);
   virtual ~Actor() {}
 
-  void Draw() const;
+  virtual void Draw() const;
   void Update(float elapsedTime);
   const sf::Vector2i& GetPosition() const;
   Direction GetDirection() const;

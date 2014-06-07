@@ -9,16 +9,16 @@ Game::Game()
   , m_Score(0)
 {
   m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,
-    RED_GHOST_SCATTER_TARGET, RedGhostStrategy, 1);
+    RED_GHOST_SCATTER_TARGET, RedGhostStrategy, Ghost::RED, 1);
 
   m_Ghosts[Ghost::BLUE] = new Ghost(*this, BLUE_GHOST_START_TILE,
-    BLUE_GHOST_SCATTER_TARGET, BlueGhostStrategy, 2);
+    BLUE_GHOST_SCATTER_TARGET, BlueGhostStrategy, Ghost::BLUE, 2);
 
   m_Ghosts[Ghost::PINK] = new Ghost(*this, PINK_GHOST_START_TILE,
-    PINK_GHOST_SCATTER_TARGET, PinkGhostStrategy, 3);
+    PINK_GHOST_SCATTER_TARGET, PinkGhostStrategy, Ghost::PINK, 3);
 
   m_Ghosts[Ghost::ORANGE] = new Ghost(*this, ORANGE_GHOST_START_TILE,
-    ORANGE_GHOST_SCATTER_TARGET, OrangeGhostStrategy, 4);
+    ORANGE_GHOST_SCATTER_TARGET, OrangeGhostStrategy, Ghost::ORANGE, 4);
 
   m_Window.create(sf::VideoMode(448, 576),
     "Pacman", sf::Style::Titlebar | sf::Style::Close);

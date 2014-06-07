@@ -28,7 +28,7 @@ void Actor::SetCurrentSprite()
 {
   m_CurrentSprite =
     &((*m_CurrentSpritesArray)[int(m_Direction)][m_AnimationStage]);
-  Maze::SetSpritePosition(*m_CurrentSprite, m_Position);
+  Maze::SetPosition(*m_CurrentSprite, m_Position);
 }
 
 const sf::Vector2i& Actor::GetPosition() const
@@ -58,7 +58,7 @@ void Actor::UpdateAnimation(float deltaTime)
     default: assert(0);
   }
 
-  Maze::SetSpritePosition(*m_CurrentSprite, position);
+  Maze::SetPosition(*m_CurrentSprite, position);
 }
 
 void Actor::Update(float elapsedTime)

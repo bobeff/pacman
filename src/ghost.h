@@ -8,7 +8,7 @@ typedef sf::Vector2i(*GhostStrategy)(const Game& game);
 class Ghost : public Actor
 {
 public:
-  enum
+  enum Color
   {
     RED,
     BLUE,
@@ -21,9 +21,12 @@ public:
         const sf::Vector2i& startPosition,
         const sf::Vector2i& target,
         GhostStrategy strategy,
+        Color color,
         int spritesIndex);
 
   virtual ~Ghost();
+
+  virtual void Draw() const;
 
   GhostMode::Mode GetMode() const;
 
@@ -42,6 +45,7 @@ private:
   int GetDistanceToTarget(const sf::Vector2i& position) const;
   bool IsMovePossible(const sf::Vector2i& position) const;
   bool IsInHouse() const;
+  const sf::Color& GetColor() const;
   virtual void UpdatePosition(float elapsedTime);
 
   sf::Vector2i m_CameFrom;
@@ -53,6 +57,7 @@ private:
   bool m_IsModeChanged;
 
   GhostStrategy m_Strategy;
+  Color m_Color;
 
   ActorSprites m_RunModeSprites;
   ActorSprites m_AboutToStopRunModeSprites;

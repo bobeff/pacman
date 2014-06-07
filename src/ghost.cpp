@@ -9,12 +9,14 @@ Ghost::Ghost(Game& game,
              const sf::Vector2i& startPosition,
              const sf::Vector2i& target,
              GhostStrategy strategy,
+             Color color,
              int spritesIndex)
   : Actor(game, startPosition, spritesIndex, MOVE_TIME)
   , m_CameFrom(startPosition)
   , m_ScatterTargetTile(target)
   , m_IsModeChanged(false)
   , m_Strategy(strategy)
+  , m_Color(color)
 {
   m_Modes[GhostMode::Chase] = new ChaseMode(*this);
   m_Modes[GhostMode::Scatter] = new ScatterMode(*this);
@@ -35,6 +37,35 @@ Ghost::~Ghost()
   {
     delete m_Modes[i];
   }
+}
+
+//#define ENABLE_DEBUG_VISUALIZATIONS
+
+void Ghost::Draw() const
+{
+  Actor::Draw();
+
+#ifdef ENABLE_DEBUG_VISUALIZATIONS
+  static sf::RectangleShape square(
+    sf::Vector2f(Maze::TILE_SIZE, Maze::TILE_SIZE));
+  sf::Vector2i targetTile = m_Mode->GetTargetTile();
+  Maze::SetPosition(square, targetTile);
+  square.setFillColor(GetColor());
+  m_Game.m_Window.draw(square);
+#endif
+}
+
+const sf::Color& Ghost::GetColor() const
+{
+  static const sf::Color COLORS[Ghost::COUNT] =
+  {
+    sf::Color(255,   0,   0, 127), // red
+    sf::Color(  0, 128, 255, 127), // blue
+    sf::Color(255,  74, 255, 127), // pink
+    sf::Color(255, 170,   0, 127), // orange
+  };
+
+  return COLORS[m_Color];
 }
 
 void Ghost::ChangeMode(GhostMode::Mode mode, float startTime)

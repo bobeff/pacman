@@ -76,30 +76,30 @@ void Maze::Draw()
       }
 
       if (!sprite) continue;
-      SetSpritePosition(*sprite, x, y);
+      SetPosition(*sprite, x, y);
       m_Game.m_Window.draw(*sprite);
     }
   }
 }
 
-void Maze::SetSpritePosition(sf::Sprite& sprite, float x, float y)
+void Maze::SetPosition(sf::Transformable& object, float x, float y)
 {
-  sprite.setPosition(x * TILE_SIZE, y * TILE_SIZE);
+  object.setPosition(x * TILE_SIZE, y * TILE_SIZE);
 }
 
-void Maze::SetSpritePosition(sf::Sprite& sprite, int x, int y)
+void Maze::SetPosition(sf::Transformable& object, int x, int y)
 {
-  SetSpritePosition(sprite, float(x), float(y));
+  SetPosition(object, float(x), float(y));
 }
 
-void Maze::SetSpritePosition(sf::Sprite& sprite, const sf::Vector2i& position)
+void Maze::SetPosition(sf::Transformable& object, const sf::Vector2i& position)
 {
-  SetSpritePosition(sprite, position.x, position.y);
+  SetPosition(object, position.x, position.y);
 }
 
-void Maze::SetSpritePosition(sf::Sprite& sprite, const sf::Vector2f& position)
+void Maze::SetPosition(sf::Transformable& object, const sf::Vector2f& position)
 {
-  SetSpritePosition(sprite, position.x, position.y);
+  SetPosition(object, position.x, position.y);
 }
 
 void Maze::TruncatePosition(sf::Vector2i& position)
