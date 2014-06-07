@@ -31,6 +31,14 @@ Game::Game()
   m_Text.setStyle(sf::Text::Bold);
 }
 
+Game::~Game()
+{
+  for (int i = 0; i < Ghost::COUNT; ++i)
+  {
+    delete m_Ghosts[i];
+  }
+}
+
 void Game::DrawText(const char* str, float x, float y)
 {
   m_Text.setString(str);
