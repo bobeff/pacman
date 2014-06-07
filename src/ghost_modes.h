@@ -22,7 +22,7 @@ public:
 
   virtual void Reset(float startTime) = 0;
   virtual void TryToChange(float elapsedTime) = 0;
-  virtual const sf::Vector2i& GetTargetTile() const = 0;
+  virtual sf::Vector2i GetTargetTile() const = 0;
   virtual int GetInitialDistance() const = 0;
   virtual bool CompareDistances(int dist1, int dist2) const = 0;
   virtual void OnCollisionWithPacman() const = 0;
@@ -40,7 +40,7 @@ class ModeName##Mode : public GhostMode { \
     ModeName##Mode(Ghost& ghost) : GhostMode(ghost, ModeName) {} \
     virtual void Reset(float startTime); \
     virtual void TryToChange(float elapsedTime); \
-    virtual const sf::Vector2i& GetTargetTile() const; \
+    virtual sf::Vector2i GetTargetTile() const; \
     virtual int GetInitialDistance() const; \
     virtual bool CompareDistances(int dist1, int dist2) const; \
     virtual void OnCollisionWithPacman() const; \

@@ -29,7 +29,7 @@ void ChaseMode::TryToChange(float elapsedTime)
   m_Ghost.ChangeMode(Scatter, elapsedTime);
 }
 
-const sf::Vector2i& ChaseMode::GetTargetTile() const
+sf::Vector2i ChaseMode::GetTargetTile() const
 {
   return m_Ghost.GetTargetTile();
 }
@@ -67,7 +67,7 @@ void ScatterMode::TryToChange(float elapsedTime)
   m_Ghost.ChangeMode(Chase, elapsedTime);
 }
 
-const sf::Vector2i& ScatterMode::GetTargetTile() const
+sf::Vector2i ScatterMode::GetTargetTile() const
 {
   return m_Ghost.GetScatterTargetTile();
 }
@@ -106,7 +106,7 @@ void RunMode::TryToChange(float elapsedTime)
   m_Ghost.ChangeMode(AboutToStopRun, elapsedTime);
 }
 
-const sf::Vector2i& RunMode::GetTargetTile() const
+sf::Vector2i RunMode::GetTargetTile() const
 {
   return m_Ghost.GetTargetTile();
 }
@@ -146,7 +146,7 @@ void AboutToStopRunMode::TryToChange(float elapsedTime)
   m_Ghost.ChangeMode(Chase, elapsedTime);
 }
 
-const sf::Vector2i& AboutToStopRunMode::GetTargetTile() const
+sf::Vector2i AboutToStopRunMode::GetTargetTile() const
 {
   return m_Ghost.GetTargetTile();
 }
@@ -183,7 +183,7 @@ void GoToResetMode::TryToChange(float elapsedTime)
   m_Ghost.ChangeMode(Chase, elapsedTime);
 }
 
-const sf::Vector2i& GoToResetMode::GetTargetTile() const
+sf::Vector2i GoToResetMode::GetTargetTile() const
 {
   return m_Ghost.GetStartTile();;
 }

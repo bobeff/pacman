@@ -81,6 +81,7 @@ GhostMode::Mode Ghost::GetMode() const
 
 sf::Vector2i Ghost::GetTargetTile() const
 {
+  // if the ghost is in the house then first escape from there
   if (IsInHouse()) return sf::Vector2i(14, 14);
   return m_Strategy(m_Game);
 }
@@ -97,7 +98,7 @@ const sf::Vector2i& Ghost::GetScatterTargetTile() const
 
 int Ghost::GetDistanceToTarget(const sf::Vector2i& position) const
 {
-  const sf::Vector2i& target = m_Mode->GetTargetTile();
+  sf::Vector2i target = m_Mode->GetTargetTile();
 #define SQR(X) ((X) * (X))
   return SQR(target.x - position.x) + SQR(target.y - position.y);
 #undef SQR
