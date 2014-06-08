@@ -45,6 +45,9 @@
     <ClCompile Include="src\ghost_strategies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gameplay_constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
@@ -71,7 +74,7 @@
     <ClInclude Include="src\ghost_modes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ghost_strategies.h">
+    <ClInclude Include="src\gameplay_constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

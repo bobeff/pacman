@@ -14,19 +14,20 @@ enum Direction
 class Actor
 {
 public:
-  Actor(Game& game, const sf::Vector2i& startPosition,
-    int imagesIndex, float moveTimeInterval);
+  Actor(Game& game, const sf::Vector2i& startPosition, int spritesIndex);
   virtual ~Actor() {}
 
   virtual void Draw() const;
   void Update(float elapsedTime);
   const sf::Vector2i& GetPosition() const;
   Direction GetDirection() const;
+  const sf::Vector2i& GetStartTile() const;
 
 protected:
   void SetCurrentSprite();
   void UpdateAnimation(float deltaTime);
   virtual void UpdatePosition(float elapsedTime) = 0;
+  virtual float GetMoveTimeInterval() const = 0;
 
   Game& m_Game;
 
@@ -38,7 +39,6 @@ protected:
   ActorSprites* m_CurrentSpritesArray;
 
   float m_PreviousTime;
-  float m_MoveTimeInterval;
 
   sf::Vector2i m_StartPosition;
   sf::Vector2i m_Position;

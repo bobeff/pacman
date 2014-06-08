@@ -3,11 +3,9 @@
 #include "game.h"
 #include "sprite_factory.h"
 
-Actor::Actor(Game& game, const sf::Vector2i& startPosition, int imagesIndex,
-  float moveTimeInterval)
+Actor::Actor(Game& game, const sf::Vector2i& startPosition, int spritesIndex)
   : m_Game(game)
   , m_PreviousTime(0.f)
-  , m_MoveTimeInterval(moveTimeInterval)
   , m_StartPosition(startPosition)
   , m_Position(m_StartPosition)
   , m_NextPosition(m_Position)
@@ -15,7 +13,7 @@ Actor::Actor(Game& game, const sf::Vector2i& startPosition, int imagesIndex,
   , m_AnimationStage(1)
   , m_CurrentSpritesArray(&m_Sprites)
 {
-  SpriteFactory::Get().CreateActorSprites(imagesIndex, m_Sprites);
+  SpriteFactory::Get().CreateActorSprites(spritesIndex, m_Sprites);
   SetCurrentSprite();
 }
 
@@ -41,12 +39,17 @@ Direction Actor::GetDirection() const
   return m_Direction;
 }
 
+const sf::Vector2i& Actor::GetStartTile() const
+{
+  return m_StartPosition;
+}
+
 void Actor::UpdateAnimation(float deltaTime)
 {
   if (m_Position == m_NextPosition)
     return;
 
-  float deltaMove = deltaTime / m_MoveTimeInterval;
+  float deltaMove = deltaTime / GetMoveTimeInterval();
   sf::Vector2f position(m_Position);
 
   switch (m_Direction)
@@ -65,7 +68,7 @@ void Actor::Update(float elapsedTime)
 {
   float deltaTime = elapsedTime - m_PreviousTime;
   
-  if (deltaTime < m_MoveTimeInterval)
+  if (deltaTime < GetMoveTimeInterval())
     UpdateAnimation(deltaTime);
   else
   {

@@ -2,12 +2,11 @@
 #include "pacman.h"
 #include "game.h"
 #include "sprite_factory.h"
-
-static const sf::Vector2i START_TILE(14, 26);
-static const float MOVE_TIME = .14f;
+#include "gameplay_constants.h"
 
 Pacman::Pacman(Game& game)
-  : Actor(game, START_TILE, 0, MOVE_TIME)
+  : Actor(game, PACMAN_START_TILE, 0)
+  , m_MoveTimeInterval(PACMAN_MOVE_TIME)
 {
   NewDirection = Direction::NONE;
   m_Direction = Direction::NONE;
@@ -32,6 +31,11 @@ static void UpdatePosition(Direction direction, sf::Vector2i& position)
   }
 
   Maze::TruncatePosition(position);
+}
+
+float Pacman::GetMoveTimeInterval() const
+{
+  return m_MoveTimeInterval;
 }
 
 bool Pacman::IsMovePossible(const sf::Vector2i& position) const

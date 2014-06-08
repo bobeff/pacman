@@ -1,11 +1,7 @@
 #include "pch.h"
 #include "ghost_modes.h"
 #include "ghost.h"
-
-static const float CHASE_TIME = 20.f;
-static const float SCATTER_TIME = 10.f;
-static const float RUN_TIME = 15.f;
-static const float ABOUT_TO_STOP_RUN_TIME = 5.f;
+#include "gameplay_constants.h"
 
 GhostMode::GhostMode(Ghost& ghost, Mode mode)
   : m_Ghost(ghost)
@@ -53,6 +49,11 @@ void ChaseMode::ReverseDirection() const
   m_Ghost.ReverseDirection();
 }
 
+float ChaseMode::GetMoveTimeInterval() const
+{
+  return GHOST_MOVE_TIME;
+}
+
 // ------------------- ScatterMode methods -----------------------------------
 
 void ScatterMode::Reset(float startTime)
@@ -89,6 +90,11 @@ void ScatterMode::OnCollisionWithPacman() const
 void ScatterMode::ReverseDirection() const
 {
   m_Ghost.ReverseDirection();
+}
+
+float ScatterMode::GetMoveTimeInterval() const
+{
+  return GHOST_MOVE_TIME;
 }
 
 // ------------------- RunMode methods ---------------------------------------
@@ -131,6 +137,11 @@ void RunMode::ReverseDirection() const
   m_Ghost.ReverseDirection();
 }
 
+float RunMode::GetMoveTimeInterval() const
+{
+  return GHOST_RUN_MOVE_TIME;
+}
+
 // ------------------- AboutToStopRunMode methods ----------------------------
 
 void AboutToStopRunMode::Reset(float startTime)
@@ -170,6 +181,11 @@ void AboutToStopRunMode::ReverseDirection() const
 {
 }
 
+float AboutToStopRunMode::GetMoveTimeInterval() const
+{
+  return GHOST_RUN_MOVE_TIME;
+}
+
 // ------------------- ResetMode methods -------------------------------------
 
 void GoToResetMode::Reset(float startTime)
@@ -204,4 +220,9 @@ void GoToResetMode::OnCollisionWithPacman() const
 
 void GoToResetMode::ReverseDirection() const
 {
+}
+
+float GoToResetMode::GetMoveTimeInterval() const
+{
+  return GHOST_MOVE_TIME;
 }

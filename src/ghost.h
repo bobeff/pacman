@@ -19,19 +19,17 @@ public:
 
   Ghost(Game& game,
         const sf::Vector2i& startPosition,
-        const sf::Vector2i& target,
+        const sf::Vector2i& scatterTarget,
         GhostStrategy strategy,
         Color color,
         int spritesIndex);
 
   virtual ~Ghost();
-
   virtual void Draw() const;
 
   GhostMode::Mode GetMode() const;
 
   sf::Vector2i GetTargetTile() const;
-  const sf::Vector2i& GetStartTile() const;
   const sf::Vector2i& GetScatterTargetTile() const;
 
   void ChangeMode(GhostMode::Mode mode, float startTime);
@@ -47,6 +45,7 @@ private:
   bool IsInHouse() const;
   const sf::Color& GetColor() const;
   virtual void UpdatePosition(float elapsedTime);
+  virtual float GetMoveTimeInterval() const;
 
   sf::Vector2i m_CameFrom;
   sf::Vector2i m_ScatterTargetTile;

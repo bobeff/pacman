@@ -27,6 +27,7 @@ public:
   virtual bool CompareDistances(int dist1, int dist2) const = 0;
   virtual void OnCollisionWithPacman() const = 0;
   virtual void ReverseDirection() const = 0;
+  virtual float GetMoveTimeInterval() const = 0;
 
 protected:
   Ghost& m_Ghost;
@@ -45,6 +46,7 @@ class ModeName##Mode : public GhostMode { \
     virtual bool CompareDistances(int dist1, int dist2) const; \
     virtual void OnCollisionWithPacman() const; \
     virtual void ReverseDirection() const; \
+    virtual float GetMoveTimeInterval() const; \
   };
 
 DECLARE_MODE_CLASS(Chase)

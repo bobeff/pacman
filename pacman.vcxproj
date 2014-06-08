@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="src\actor.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\gameplay_constants.cpp" />
     <ClCompile Include="src\ghost.cpp" />
     <ClCompile Include="src\ghost_modes.cpp" />
     <ClCompile Include="src\ghost_strategies.cpp" />
@@ -170,9 +171,9 @@
   <ItemGroup>
     <ClInclude Include="src\actor.h" />
     <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\gameplay_constants.h" />
     <ClInclude Include="src\ghost.h" />
     <ClInclude Include="src\ghost_modes.h" />
-    <ClInclude Include="src\ghost_strategies.h" />
     <ClInclude Include="src\maze.h" />
     <ClInclude Include="src\pacman.h" />
     <ClInclude Include="src\pch.h" />

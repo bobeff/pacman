@@ -2,18 +2,17 @@
 #include "ghost.h"
 #include "game.h"
 #include "sprite_factory.h"
-
-static const float MOVE_TIME = .15f;
+#include "gameplay_constants.h"
 
 Ghost::Ghost(Game& game,
              const sf::Vector2i& startPosition,
-             const sf::Vector2i& target,
+             const sf::Vector2i& scatterTarget,
              GhostStrategy strategy,
              Color color,
              int spritesIndex)
-  : Actor(game, startPosition, spritesIndex, MOVE_TIME)
+  : Actor(game, startPosition, spritesIndex)
   , m_CameFrom(startPosition)
-  , m_ScatterTargetTile(target)
+  , m_ScatterTargetTile(scatterTarget)
   , m_IsModeChanged(false)
   , m_Strategy(strategy)
   , m_Color(color)
@@ -112,14 +111,9 @@ GhostMode::Mode Ghost::GetMode() const
 
 sf::Vector2i Ghost::GetTargetTile() const
 {
-  // if the ghost is in the house then first escape from there
-  if (IsInHouse()) return sf::Vector2i(14, 14);
+  // if the ghost is in the house then first escape from it
+  if (IsInHouse()) return GHOSTS_OUT_OF_HOUSE_TARGET;
   return m_Strategy(m_Game);
-}
-
-const sf::Vector2i& Ghost::GetStartTile() const
-{
-  return m_StartPosition;
 }
 
 const sf::Vector2i& Ghost::GetScatterTargetTile() const
@@ -149,6 +143,11 @@ bool Ghost::IsMovePossible(const sf::Vector2i& position) const
 bool Ghost::IsInHouse() const
 {
   return m_Game.m_Maze.GetTile(m_Position) == '-';
+}
+
+float Ghost::GetMoveTimeInterval() const
+{
+  return m_Mode->GetMoveTimeInterval();
 }
 
 void Ghost::UpdatePosition(float elapsedTime)

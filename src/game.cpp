@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "game.h"
-#include "ghost_strategies.h"
+#include "gameplay_constants.h"
 
 Game::Game()
   : m_Maze(*this)

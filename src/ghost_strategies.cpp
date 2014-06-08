@@ -1,18 +1,6 @@
 #include "pch.h"
-#include "ghost_strategies.h"
 #include "game.h"
-
-const sf::Vector2i RED_GHOST_START_TILE(14, 17);
-const sf::Vector2i RED_GHOST_SCATTER_TARGET(25, 0);
-
-const sf::Vector2i BLUE_GHOST_START_TILE(13, 17);
-const sf::Vector2i BLUE_GHOST_SCATTER_TARGET(27, 35);
-
-const sf::Vector2i PINK_GHOST_START_TILE(12, 17);
-const sf::Vector2i PINK_GHOST_SCATTER_TARGET(2, 0);
-
-const sf::Vector2i ORANGE_GHOST_START_TILE(15, 17);
-const sf::Vector2i ORANGE_GHOST_SCATTER_TARGET(0, 35);
+#include "gameplay_constants.h"
 
 static sf::Vector2i GetPositionBefore(const Pacman& pacman, int tilesCount)
 {
