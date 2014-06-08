@@ -14,6 +14,21 @@ Pacman::Pacman(Game& game)
   SetInitialSpriteAsCurrent();
 }
 
+sf::Vector2i Pacman::GetPositionAhead(int tilesCount) const
+{
+  sf::Vector2i position = m_Position;
+
+  switch (m_Direction)
+  {
+  case Direction::EAST:  position += sf::Vector2i(tilesCount, 0); break;
+  case Direction::WEST:  position -= sf::Vector2i(tilesCount, 0); break;
+  case Direction::NORTH: position -= sf::Vector2i(0, tilesCount); break;
+  case Direction::SOUTH: position += sf::Vector2i(0, tilesCount); break;
+  }
+
+  return position;
+}
+
 void Pacman::SetInitialSpriteAsCurrent()
 {
   m_CurrentSprite = &m_InitialSprite;
@@ -24,10 +39,10 @@ static void UpdatePosition(Direction direction, sf::Vector2i& position)
 {
   switch (direction)
   {
-    case Direction::WEST:  --position.x; break;
-    case Direction::EAST:  ++position.x; break;
-    case Direction::NORTH: --position.y; break;
-    case Direction::SOUTH: ++position.y; break;
+  case Direction::WEST:  --position.x; break;
+  case Direction::EAST:  ++position.x; break;
+  case Direction::NORTH: --position.y; break;
+  case Direction::SOUTH: ++position.y; break;
   }
 
   Maze::TruncatePosition(position);

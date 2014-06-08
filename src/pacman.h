@@ -6,7 +6,7 @@ class Pacman : public Actor
 {
 public:
   Pacman(Game& game);
- 
+  sf::Vector2i GetPositionAhead(int tilesCount) const;
   Direction NewDirection;
 
 private:

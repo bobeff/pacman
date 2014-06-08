@@ -2,20 +2,9 @@
 #include "game.h"
 #include "gameplay_constants.h"
 
-static sf::Vector2i GetPositionBefore(const Pacman& pacman, int tilesCount)
+static double length(const sf::Vector2i& v)
 {
-  sf::Vector2i result = pacman.GetPosition();
-  Direction dir = pacman.GetDirection();
-
-  switch (dir)
-  {
-  case Direction::EAST:  result += sf::Vector2i(tilesCount, 0); break;
-  case Direction::WEST:  result -= sf::Vector2i(tilesCount, 0); break;
-  case Direction::NORTH: result -= sf::Vector2i(0, tilesCount); break;
-  case Direction::SOUTH: result += sf::Vector2i(0, tilesCount); break;
-  }
-
-  return result;
+  return sqrt(v.x * v.x + v.y * v.y);
 }
 
 sf::Vector2i RedGhostStrategy(const Game& game)
@@ -25,21 +14,16 @@ sf::Vector2i RedGhostStrategy(const Game& game)
 
 sf::Vector2i BlueGhostStrategy(const Game& game)
 {
-  sf::Vector2i twoTilesBeforePacman = GetPositionBefore(game.m_Pacman, 2);
+  sf::Vector2i twoTilesAheadOfPacman = game.m_Pacman.GetPositionAhead(2);
   sf::Vector2i redGhostPosition = game.m_Ghosts[Ghost::RED]->GetPosition();
   // this is double of the vector between red ghost
-  // and two tiles before pacman
-  return 2 * twoTilesBeforePacman - redGhostPosition;
+  // and two tiles in front of pacman
+  return 2 * twoTilesAheadOfPacman - redGhostPosition;
 }
 
 sf::Vector2i PinkGhostStrategy(const Game& game)
 {
-  return GetPositionBefore(game.m_Pacman, 4);
-}
-
-static double length(const sf::Vector2i& v)
-{
-  return sqrt(v.x * v.x + v.y * v.y);
+  return game.m_Pacman.GetPositionAhead(4);
 }
 
 sf::Vector2i OrangeGhostStrategy(const Game& game)
