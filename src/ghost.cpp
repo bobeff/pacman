@@ -104,6 +104,17 @@ void Ghost::Flicker()
     &m_AboutToStopRunModeSprites : &m_RunModeSprites;
 }
 
+void Ghost::OnGhostEaten()
+{
+  // The first ghost captured after an energizer has been eaten is always
+  // worth 200 points. Each additional ghost captured from the same energizer
+  // will then be worth twice as many points as the one before it - 400, 800,
+  // and 1600 points, respectively. 
+  ++m_Game.m_EatenGhostsCount;
+  m_Game.m_Score += 100 * (1 << m_Game.m_EatenGhostsCount);
+  ChangeMode(GhostMode::GoToReset, 0);
+}
+
 GhostMode::Mode Ghost::GetMode() const
 {
   return m_Mode->GetModeID();

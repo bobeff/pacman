@@ -38,5 +38,6 @@ private:
   Ghost* m_Ghosts[Ghost::COUNT];
 
   sf::Uint8  m_TilesConsumed;
+  sf::Uint8  m_EatenGhostsCount;
   sf::Uint16 m_Score;
 };

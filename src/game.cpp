@@ -6,6 +6,7 @@ Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
   , m_TilesConsumed(0)
+  , m_EatenGhostsCount(0)
   , m_Score(0)
 {
   m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,

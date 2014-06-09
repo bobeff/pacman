@@ -129,7 +129,7 @@ bool RunMode::CompareDistances(int dist1, int dist2) const
 
 void RunMode::OnCollisionWithPacman() const
 {
-  m_Ghost.ChangeMode(GoToReset, 0);
+  m_Ghost.OnGhostEaten();
 }
 
 void RunMode::ReverseDirection() const
@@ -174,7 +174,7 @@ bool AboutToStopRunMode::CompareDistances(int dist1, int dist2) const
 
 void AboutToStopRunMode::OnCollisionWithPacman() const
 {
-  m_Ghost.ChangeMode(GoToReset, 0);
+  m_Ghost.OnGhostEaten();
 }
 
 void AboutToStopRunMode::ReverseDirection() const

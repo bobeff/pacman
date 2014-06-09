@@ -35,6 +35,7 @@ void Maze::ConsumeTile(const sf::Vector2i& position)
     ++m_Game.m_TilesConsumed;
     m_Game.m_Score += 100;
     m_Game.SetGhostsToRunMode();
+    m_Game.m_EatenGhostsCount = 0;
   }
   tile = ' ';
 }
