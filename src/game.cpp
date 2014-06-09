@@ -8,6 +8,7 @@ Game::Game()
   , m_TilesConsumed(0)
   , m_EatenGhostsCount(0)
   , m_Score(0)
+  , m_IsGamePaused(false)
 {
   m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,
     RED_GHOST_SCATTER_TARGET, RedGhostStrategy, Ghost::RED, 1);
@@ -40,10 +41,12 @@ Game::~Game()
   }
 }
 
-void Game::DrawText(const char* str, float x, float y)
+void Game::DrawText(const char* str, const sf::Vector2f& position,
+  const sf::Color& color)
 {
   m_Text.setString(str);
-  m_Text.setPosition(x, y);
+  m_Text.setPosition(position);
+  m_Text.setColor(color);
   m_Window.draw(m_Text);
 }
 
@@ -92,15 +95,22 @@ int Game::Run()
         case sf::Keyboard::S:
           m_Pacman.NewDirection = Direction::SOUTH;
           break;
+        case sf::Keyboard::Pause:
+        case sf::Keyboard::P:
+          m_IsGamePaused = !m_IsGamePaused;
+          break;
         }
       }
     }
 
-    float elapsedTime = m_Clock.getElapsedTime().asSeconds();
-    m_Pacman.Update(elapsedTime);
-    for (int i = 0; i < Ghost::COUNT; ++i)
+    if (!m_IsGamePaused)
     {
-      m_Ghosts[i]->Update(elapsedTime);
+      float elapsedTime = m_Clock.getElapsedTime().asSeconds();
+      m_Pacman.Update(elapsedTime);
+      for (int i = 0; i < Ghost::COUNT; ++i)
+      {
+        m_Ghosts[i]->Update(elapsedTime);
+      }
     }
 
     m_Window.clear(sf::Color::Black);
@@ -113,8 +123,19 @@ int Game::Run()
 
     char scoreStr[16];
     sprintf(scoreStr, "Score: %d", m_Score);
-    static const float GAME_INFO_Y_POSITION = 34.5f * Maze::TILE_SIZE;
-    DrawText(scoreStr, Maze::TILE_SIZE, GAME_INFO_Y_POSITION);
+
+    static const sf::Vector2f SCORE_TEXT_POSITION(
+      Maze::TILE_SIZE, 34.5f * Maze::TILE_SIZE);
+
+    DrawText(scoreStr, SCORE_TEXT_POSITION, sf::Color::Yellow);
+
+    if (m_IsGamePaused)
+    {
+      static const sf::Vector2f PAUSE_TEXT_POSITION(
+        12.0f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
+
+      DrawText("PAUSE", PAUSE_TEXT_POSITION, sf::Color::Red);
+    }
 
     m_Window.display();
   }

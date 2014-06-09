@@ -23,7 +23,9 @@ public:
   int Run();
 
 private:
-  void DrawText(const char* str, float x, float y);
+  void DrawText(const char* str, const sf::Vector2f& position,
+    const sf::Color& color);
+
   void SetGhostsToRunMode();
 
   sf::RenderWindow m_Window;
@@ -40,4 +42,6 @@ private:
   sf::Uint8  m_TilesConsumed;
   sf::Uint8  m_EatenGhostsCount;
   sf::Uint16 m_Score;
+
+  bool m_IsGamePaused;
 };
