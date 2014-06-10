@@ -39,6 +39,7 @@ public:
   void SetResetModeSprites();
   void Flicker();
   void OnGhostEaten();
+  void OnPacmanEaten();
 
 private:
   int GetDistanceToTarget(const sf::Vector2i& position) const;

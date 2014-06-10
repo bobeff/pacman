@@ -5,10 +5,9 @@
 Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
-  , m_TilesConsumed(0)
   , m_EatenGhostsCount(0)
   , m_Score(0)
-  , m_IsGamePaused(false)
+  , m_State(State::RUNNING)
 {
   m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,
     RED_GHOST_SCATTER_TARGET, RedGhostStrategy, Ghost::RED, 1);
@@ -64,20 +63,34 @@ void Game::SetGhostsToRunMode()
 
 void Game::DrawGameInfo()
 {
-  char scoreStr[16];
-  sprintf(scoreStr, "Score: %d", m_Score);
-
   static const sf::Vector2f SCORE_TEXT_POSITION(
     Maze::TILE_SIZE, 34.5f * Maze::TILE_SIZE);
 
+  static const sf::Vector2f PAUSE_TEXT_POSITION(
+    12.0f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
+
+  static const sf::Vector2f GAME_OVER_TEXT_POSITION(
+    10.5f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
+
+  static const sf::Vector2f WINNING_TEXT_POSITION(
+    11.5f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
+
+  char scoreStr[16];
+  sprintf(scoreStr, "Score: %d", m_Score);
+
   DrawText(scoreStr, SCORE_TEXT_POSITION, sf::Color::Yellow);
 
-  if (m_IsGamePaused)
+  switch (m_State)
   {
-    static const sf::Vector2f PAUSE_TEXT_POSITION(
-      12.0f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
-
+  case State::PAUSED:
     DrawText("PAUSE", PAUSE_TEXT_POSITION, sf::Color::Red);
+    break;
+  case State::GAME_OVER:
+    DrawText("GAME OVER", GAME_OVER_TEXT_POSITION, sf::Color::Red);
+    break;
+  case State::WINNING:
+    DrawText("YOU WIN", WINNING_TEXT_POSITION, sf::Color::Yellow);
+    break;
   }
 }
 
@@ -116,13 +129,20 @@ int Game::Run()
           break;
         case sf::Keyboard::Pause:
         case sf::Keyboard::P:
-          m_IsGamePaused = !m_IsGamePaused;
+          if (m_State == State::RUNNING)
+          {
+            m_State = State::PAUSED;
+          }
+          else if (m_State == State::PAUSED)
+          {
+            m_State = State::RUNNING;
+          }
           break;
         }
       }
     }
 
-    if (!m_IsGamePaused)
+    if (m_State == State::RUNNING)
     {
       float elapsedTime = m_Clock.getElapsedTime().asSeconds();
       m_Pacman.Update(elapsedTime);

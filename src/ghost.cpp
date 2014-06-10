@@ -115,6 +115,11 @@ void Ghost::OnGhostEaten()
   ChangeMode(GhostMode::GoToReset, 0);
 }
 
+void Ghost::OnPacmanEaten()
+{
+  m_Game.m_State = Game::State::GAME_OVER;
+}
+
 GhostMode::Mode Ghost::GetMode() const
 {
   return m_Mode->GetModeID();

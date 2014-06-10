@@ -23,6 +23,14 @@ public:
   int Run();
 
 private:
+  enum State
+  {
+    RUNNING,
+    PAUSED,
+    GAME_OVER,
+    WINNING,
+  };
+
   void DrawText(const char* str, const sf::Vector2f& position,
     const sf::Color& color);
 
@@ -40,9 +48,8 @@ private:
 
   Ghost* m_Ghosts[Ghost::COUNT];
 
-  sf::Uint8  m_TilesConsumed;
   sf::Uint8  m_EatenGhostsCount;
   sf::Uint16 m_Score;
 
-  bool m_IsGamePaused;
+  State m_State;
 };

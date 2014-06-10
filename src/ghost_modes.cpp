@@ -42,6 +42,7 @@ bool ChaseMode::CompareDistances(int dist1, int dist2) const
 
 void ChaseMode::OnCollisionWithPacman() const
 {
+  m_Ghost.OnPacmanEaten();
 }
 
 void ChaseMode::ReverseDirection() const
@@ -85,6 +86,7 @@ bool ScatterMode::CompareDistances(int dist1, int dist2) const
 
 void ScatterMode::OnCollisionWithPacman() const
 {
+  m_Ghost.OnPacmanEaten();
 }
 
 void ScatterMode::ReverseDirection() const

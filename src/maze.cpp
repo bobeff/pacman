@@ -3,7 +3,10 @@
 #include "game.h"
 #include "sprite_factory.h"
 
-Maze::Maze(Game& game) : m_Game(game)
+Maze::Maze(Game& game)
+  : m_Game(game)
+  , m_ConsumableTilesCount(0)
+  , m_TilesConsumed(0)
 {
   m_Texture.loadFromFile("assets/maze.png");
   m_Sprite.setTexture(m_Texture);
@@ -23,21 +26,29 @@ static void AssertPositionInRange(const sf::Vector2i& position)
 void Maze::ConsumeTile(const sf::Vector2i& position)
 {
   AssertPositionInRange(position);
+
   char& tile = m_Tiles[position.y][position.x];
   assert(tile != '#');
+
   if (tile == '.')
   {
-    ++m_Game.m_TilesConsumed;
+    ++m_TilesConsumed;
     m_Game.m_Score += 10;
   }
   else if (tile == '@')
   {
-    ++m_Game.m_TilesConsumed;
+    ++m_TilesConsumed;
     m_Game.m_Score += 100;
     m_Game.SetGhostsToRunMode();
     m_Game.m_EatenGhostsCount = 0;
   }
+
   tile = ' ';
+  
+  if (m_TilesConsumed == m_ConsumableTilesCount)
+  {
+    m_Game.m_State = Game::State::WINNING;
+  }
 }
 
 char Maze::GetTile(const sf::Vector2i& position) const
@@ -49,14 +60,24 @@ char Maze::GetTile(const sf::Vector2i& position) const
 void Maze::LoadTiles()
 {
   FILE* finp = fopen("assets/maze.txt", "r");
+  
   for (int y = 0; y < Y_SIZE; ++y)
   {
     for (int x = 0; x < X_SIZE; ++x)
+    {
       fscanf(finp, "%c", &m_Tiles[y][x]);
+      
+      if (m_Tiles[y][x] == '.' || m_Tiles[y][x] == '@')
+      {
+        ++m_ConsumableTilesCount;
+      }
+    }
+    
     // skip new line
     char newLine;
     fscanf(finp, "%c", &newLine);
   }
+
   fclose(finp);
 }
 

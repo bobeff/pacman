@@ -36,4 +36,7 @@ private:
   sf::Sprite m_EnergizerSprite;
 
   char m_Tiles[Y_SIZE][X_SIZE];
+
+  sf::Uint8 m_ConsumableTilesCount;
+  sf::Uint8 m_TilesConsumed;
 };
