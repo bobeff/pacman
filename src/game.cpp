@@ -62,6 +62,25 @@ void Game::SetGhostsToRunMode()
   }
 }
 
+void Game::DrawGameInfo()
+{
+  char scoreStr[16];
+  sprintf(scoreStr, "Score: %d", m_Score);
+
+  static const sf::Vector2f SCORE_TEXT_POSITION(
+    Maze::TILE_SIZE, 34.5f * Maze::TILE_SIZE);
+
+  DrawText(scoreStr, SCORE_TEXT_POSITION, sf::Color::Yellow);
+
+  if (m_IsGamePaused)
+  {
+    static const sf::Vector2f PAUSE_TEXT_POSITION(
+      12.0f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
+
+    DrawText("PAUSE", PAUSE_TEXT_POSITION, sf::Color::Red);
+  }
+}
+
 int Game::Run()
 {
   while (m_Window.isOpen())
@@ -121,21 +140,7 @@ int Game::Run()
       m_Ghosts[i]->Draw();
     }
 
-    char scoreStr[16];
-    sprintf(scoreStr, "Score: %d", m_Score);
-
-    static const sf::Vector2f SCORE_TEXT_POSITION(
-      Maze::TILE_SIZE, 34.5f * Maze::TILE_SIZE);
-
-    DrawText(scoreStr, SCORE_TEXT_POSITION, sf::Color::Yellow);
-
-    if (m_IsGamePaused)
-    {
-      static const sf::Vector2f PAUSE_TEXT_POSITION(
-        12.0f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
-
-      DrawText("PAUSE", PAUSE_TEXT_POSITION, sf::Color::Red);
-    }
+    DrawGameInfo();
 
     m_Window.display();
   }

@@ -27,6 +27,7 @@ private:
     const sf::Color& color);
 
   void SetGhostsToRunMode();
+  void DrawGameInfo();
 
   sf::RenderWindow m_Window;
   sf::Clock m_Clock;
