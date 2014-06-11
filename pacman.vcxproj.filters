@@ -81,4 +81,7 @@
   <ItemGroup>
     <Text Include="assets\maze.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
 </Project>
