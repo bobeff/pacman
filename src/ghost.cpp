@@ -221,5 +221,4 @@ void Ghost::UpdatePosition(float elapsedTime)
   }
 
   ++m_AnimationStage %= 2;
-  SetCurrentSprite();
 }

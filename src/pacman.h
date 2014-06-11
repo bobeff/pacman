@@ -10,8 +10,8 @@ public:
   Direction NewDirection;
 
 private:
-  void SetInitialSpriteAsCurrent();
   bool IsMovePossible(const sf::Vector2i& position) const;
+  virtual void SetCurrentSprite();
   virtual void UpdatePosition(float elapsedTime);
   virtual float GetMoveTimeInterval() const;
 

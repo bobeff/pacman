@@ -24,8 +24,8 @@ public:
   const sf::Vector2i& GetStartTile() const;
 
 protected:
-  void SetCurrentSprite();
   void UpdateAnimation(float deltaTime);
+  virtual void SetCurrentSprite();
   virtual void UpdatePosition(float elapsedTime) = 0;
   virtual float GetMoveTimeInterval() const = 0;
 

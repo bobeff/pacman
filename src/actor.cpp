@@ -24,6 +24,7 @@ void Actor::Draw() const
 
 void Actor::SetCurrentSprite()
 {
+  assert(m_Direction != Direction::NONE);
   m_CurrentSprite =
     &((*m_CurrentSpritesArray)[int(m_Direction)][m_AnimationStage]);
   Maze::SetPosition(*m_CurrentSprite, m_Position);
@@ -74,5 +75,6 @@ void Actor::Update(float elapsedTime)
   {
     m_PreviousTime = elapsedTime;
     UpdatePosition(elapsedTime);
+    SetCurrentSprite();
   }
 }

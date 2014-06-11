@@ -11,7 +11,7 @@ Pacman::Pacman(Game& game)
   NewDirection = Direction::NONE;
   m_Direction = Direction::NONE;
   m_InitialSprite = SpriteFactory::Get().CreatePacmanInitialSprite();
-  SetInitialSpriteAsCurrent();
+  SetCurrentSprite();
 }
 
 sf::Vector2i Pacman::GetPositionAhead(int tilesCount) const
@@ -29,10 +29,17 @@ sf::Vector2i Pacman::GetPositionAhead(int tilesCount) const
   return position;
 }
 
-void Pacman::SetInitialSpriteAsCurrent()
+void Pacman::SetCurrentSprite()
 {
-  m_CurrentSprite = &m_InitialSprite;
-  Maze::SetPosition(*m_CurrentSprite, m_Position);
+  if (m_Direction == Direction::NONE)
+  {
+    m_CurrentSprite = &m_InitialSprite;
+    Maze::SetPosition(*m_CurrentSprite, m_Position);
+  }
+  else
+  {
+    Actor::SetCurrentSprite();
+  }
 }
 
 static void UpdatePosition(Direction direction, sf::Vector2i& position)
@@ -82,11 +89,9 @@ void Pacman::UpdatePosition(float elapsedTime)
   {
     m_NextPosition = newPosition;
     ++m_AnimationStage %= 2;
-    SetCurrentSprite();
   }
   else
   {
     NewDirection = Direction::NONE;
-    SetInitialSpriteAsCurrent();
   }
 }
