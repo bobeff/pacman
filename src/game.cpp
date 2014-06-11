@@ -9,7 +9,9 @@ Game::Game()
   , m_EatenGhostsCount(0)
   , m_PacmanLivesCount(3)
   , m_Score(0)
-  , m_State(State::RUNNING)
+  , m_State(State::ABOUT_TO_START)
+  , m_OldState(State::ABOUT_TO_START)
+  , m_PacmanEatenTime(0.0f)
 {
   m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,
     RED_GHOST_SCATTER_TARGET, RedGhostStrategy, Ghost::RED, 1);
@@ -63,6 +65,18 @@ void Game::SetGhostsToRunMode()
   }
 }
 
+void Game::Reset()
+{
+  m_Pacman.Reset();
+
+  for (int i = 0; i < Ghost::COUNT; ++i)
+  {
+    m_Ghosts[i]->Reset();
+  }
+
+  m_Clock.restart();
+}
+
 void Game::OnPacmanEaten()
 {
   if (0 == --m_PacmanLivesCount)
@@ -71,12 +85,8 @@ void Game::OnPacmanEaten()
   }
   else
   {
-    m_Pacman.Reset();
-
-    for (int i = 0; i < Ghost::COUNT; ++i)
-    {
-      m_Ghosts[i]->Reset();
-    }
+    m_PacmanEatenTime = m_Clock.getElapsedTime().asSeconds();
+    m_State = PACMAN_EATEN;
   }
 }
 
@@ -129,6 +139,35 @@ void Game::DrawGameInfo()
   }
 }
 
+void Game::Update()
+{
+  float elapsedTime = m_Clock.getElapsedTime().asSeconds();
+
+  switch (m_State)
+  {
+  case State::RUNNING:
+    m_Pacman.Update(elapsedTime);
+    for (int i = 0; i < Ghost::COUNT; ++i)
+    {
+      m_Ghosts[i]->Update(elapsedTime);
+    }
+    break;
+  case State::ABOUT_TO_START:
+    if (elapsedTime > GAME_START_DELAY)
+    {
+      m_State = State::RUNNING;
+    }
+    break;
+  case State::PACMAN_EATEN:
+    if (elapsedTime > m_PacmanEatenTime + PACMAN_EATEN_DELAY)
+    {
+      m_State = State::ABOUT_TO_START;
+      Reset();
+    }
+    break;
+  }
+}
+
 int Game::Run()
 {
   while (m_Window.isOpen())
@@ -164,28 +203,21 @@ int Game::Run()
           break;
         case sf::Keyboard::Pause:
         case sf::Keyboard::P:
-          if (m_State == State::RUNNING)
+          if (m_State == State::PAUSED)
           {
-            m_State = State::PAUSED;
+            m_State = m_OldState;
           }
-          else if (m_State == State::PAUSED)
+          else if (m_State != State::WINNING && m_State != State::GAME_OVER)
           {
-            m_State = State::RUNNING;
+            m_OldState = m_State;
+            m_State = State::PAUSED;
           }
           break;
         }
       }
     }
 
-    if (m_State == State::RUNNING)
-    {
-      float elapsedTime = m_Clock.getElapsedTime().asSeconds();
-      m_Pacman.Update(elapsedTime);
-      for (int i = 0; i < Ghost::COUNT; ++i)
-      {
-        m_Ghosts[i]->Update(elapsedTime);
-      }
-    }
+    Update();
 
     m_Window.clear(sf::Color::Black);
     m_Maze.Draw();

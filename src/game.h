@@ -25,7 +25,9 @@ public:
 private:
   enum State
   {
+    ABOUT_TO_START,
     RUNNING,
+    PACMAN_EATEN,
     PAUSED,
     GAME_OVER,
     WINNING,
@@ -34,6 +36,8 @@ private:
   void DrawText(const char* str, const sf::Vector2f& position,
     const sf::Color& color);
 
+  void Reset();
+  void Update();
   void SetGhostsToRunMode();
   void OnPacmanEaten();
   void DrawGameInfo();
@@ -54,4 +58,7 @@ private:
   sf::Uint16 m_Score;
 
   State m_State;
+  State m_OldState;
+
+  float m_PacmanEatenTime;
 };
