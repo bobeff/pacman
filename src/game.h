@@ -35,6 +35,7 @@ private:
     const sf::Color& color);
 
   void SetGhostsToRunMode();
+  void OnPacmanEaten();
   void DrawGameInfo();
 
   sf::RenderWindow m_Window;
@@ -49,6 +50,7 @@ private:
   Ghost* m_Ghosts[Ghost::COUNT];
 
   sf::Uint8  m_EatenGhostsCount;
+  sf::Uint8  m_PacmanLivesCount;
   sf::Uint16 m_Score;
 
   State m_State;

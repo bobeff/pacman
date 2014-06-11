@@ -6,6 +6,7 @@ class Pacman : public Actor
 {
 public:
   Pacman(Game& game);
+  virtual void Reset();
   sf::Vector2i GetPositionAhead(int tilesCount) const;
   Direction NewDirection;
 

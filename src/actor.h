@@ -17,6 +17,7 @@ public:
   Actor(Game& game, const sf::Vector2i& startPosition, int spritesIndex);
   virtual ~Actor() {}
 
+  virtual void Reset();
   virtual void Draw() const;
   virtual void Update(float elapsedTime);
 

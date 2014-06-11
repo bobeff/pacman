@@ -38,6 +38,14 @@ Ghost::~Ghost()
   }
 }
 
+void Ghost::Reset()
+{
+  Actor::Reset();
+  m_CameFrom = m_StartPosition;
+  ChangeMode(GhostMode::Chase, 0);
+  m_IsModeChanged = false;
+}
+
 //#define ENABLE_DEBUG_VISUALIZATIONS
 
 void Ghost::Draw() const
@@ -138,7 +146,7 @@ void Ghost::OnGhostEaten()
 
 void Ghost::OnPacmanEaten() const
 {
-  m_Game.m_State = Game::State::GAME_OVER;
+  m_Game.OnPacmanEaten();
 }
 
 GhostMode::Mode Ghost::GetMode() const

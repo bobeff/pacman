@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "game.h"
 #include "gameplay_constants.h"
+#include "sprite_factory.h"
 
 Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
   , m_EatenGhostsCount(0)
+  , m_PacmanLivesCount(3)
   , m_Score(0)
   , m_State(State::RUNNING)
 {
@@ -61,10 +63,30 @@ void Game::SetGhostsToRunMode()
   }
 }
 
+void Game::OnPacmanEaten()
+{
+  if (0 == --m_PacmanLivesCount)
+  {
+    m_State = State::GAME_OVER;
+  }
+  else
+  {
+    m_Pacman.Reset();
+
+    for (int i = 0; i < Ghost::COUNT; ++i)
+    {
+      m_Ghosts[i]->Reset();
+    }
+  }
+}
+
 void Game::DrawGameInfo()
 {
   static const sf::Vector2f SCORE_TEXT_POSITION(
-    Maze::TILE_SIZE, 34.5f * Maze::TILE_SIZE);
+    1.0f * Maze::TILE_SIZE, 34.5f * Maze::TILE_SIZE);
+
+  static const sf::Vector2f LIVES_TEXT_POSITION(
+    20.0f * Maze::TILE_SIZE, 34.5f * Maze::TILE_SIZE);
 
   static const sf::Vector2f PAUSE_TEXT_POSITION(
     12.0f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
@@ -75,10 +97,23 @@ void Game::DrawGameInfo()
   static const sf::Vector2f WINNING_TEXT_POSITION(
     11.5f * Maze::TILE_SIZE, 1.0f * Maze::TILE_SIZE);
 
+  static sf::Sprite liveSprite =
+    SpriteFactory::Get().CreatePacmanInitialSprite();
+
   char scoreStr[16];
   sprintf(scoreStr, "Score: %d", m_Score);
 
   DrawText(scoreStr, SCORE_TEXT_POSITION, sf::Color::Yellow);
+  DrawText("Lives: ", LIVES_TEXT_POSITION, sf::Color::Yellow);
+
+  for (int i = 0; i < m_PacmanLivesCount - 1; ++i)
+  {
+    liveSprite.setPosition(
+      LIVES_TEXT_POSITION.x + (i * 1.25f + 3.5f) * Maze::TILE_SIZE,
+      LIVES_TEXT_POSITION.y);
+
+    m_Window.draw(liveSprite);
+  }
 
   switch (m_State)
   {

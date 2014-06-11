@@ -6,11 +6,19 @@
 
 Pacman::Pacman(Game& game)
   : Actor(game, PACMAN_START_TILE, 0)
+  , NewDirection(Direction::NONE)
   , m_MoveTimeInterval(PACMAN_MOVE_TIME)
 {
-  NewDirection = Direction::NONE;
   m_Direction = Direction::NONE;
   m_InitialSprite = SpriteFactory::Get().CreatePacmanInitialSprite();
+  SetCurrentSprite();
+}
+
+void Pacman::Reset()
+{
+  Actor::Reset();
+  NewDirection = Direction::NONE;
+  m_Direction = Direction::NONE;
   SetCurrentSprite();
 }
 

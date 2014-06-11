@@ -9,11 +9,22 @@ Actor::Actor(Game& game, const sf::Vector2i& startPosition, int spritesIndex)
   , m_StartPosition(startPosition)
   , m_Position(m_StartPosition)
   , m_NextPosition(m_Position)
-  , m_Direction(Direction::WEST)
+  , m_Direction(Direction::NORTH)
   , m_AnimationStage(1)
   , m_CurrentSpritesArray(&m_Sprites)
 {
   SpriteFactory::Get().CreateActorSprites(spritesIndex, m_Sprites);
+  SetCurrentSprite();
+}
+
+void Actor::Reset()
+{
+  m_PreviousTime = 0.0f;
+  m_Position = m_StartPosition;
+  m_NextPosition = m_Position;
+  m_Direction = Direction::NORTH;
+  m_AnimationStage = 1;
+  m_CurrentSpritesArray = &m_Sprites;
   SetCurrentSprite();
 }
 

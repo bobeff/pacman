@@ -25,6 +25,7 @@ public:
         int spritesIndex);
 
   virtual ~Ghost();
+  virtual void Reset();
   virtual void Draw() const;
   virtual void Update(float elapsedTime);
 
