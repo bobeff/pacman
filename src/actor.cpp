@@ -35,6 +35,11 @@ const sf::Vector2i& Actor::GetPosition() const
   return m_Position;
 }
 
+const sf::Vector2f& Actor::GetSpritePosition() const
+{
+  return m_CurrentSprite->getPosition();
+}
+
 Direction Actor::GetDirection() const
 {
   return m_Direction;
@@ -68,9 +73,11 @@ void Actor::UpdateAnimation(float deltaTime)
 void Actor::Update(float elapsedTime)
 {
   float deltaTime = elapsedTime - m_PreviousTime;
-  
+
   if (deltaTime < GetMoveTimeInterval())
+  {
     UpdateAnimation(deltaTime);
+  }
   else
   {
     m_PreviousTime = elapsedTime;

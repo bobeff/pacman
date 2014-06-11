@@ -67,6 +67,27 @@ const sf::Color& Ghost::GetColor() const
   return COLORS[m_Color];
 }
 
+void Ghost::CheckForCollisionWithPacman() const
+{
+  const sf::Vector2f& pacmanPosition = m_Game.m_Pacman.GetSpritePosition();
+  const sf::Vector2f& ghostPosition = GetSpritePosition();
+
+  static const float MIN_COLLISION_DISTANCE = 0.75f * Maze::TILE_SIZE;
+  sf::Vector2f distance = pacmanPosition - ghostPosition;
+
+  if (fabs(distance.x) < MIN_COLLISION_DISTANCE &&
+      fabs(distance.y) < MIN_COLLISION_DISTANCE)
+  {
+    m_Mode->OnCollisionWithPacman();
+  }
+}
+
+void Ghost::Update(float elapsedTime)
+{
+  Actor::Update(elapsedTime);
+  CheckForCollisionWithPacman();
+}
+
 void Ghost::ChangeMode(GhostMode::Mode mode, float startTime)
 {
   if (m_Mode->GetModeID() != mode)
@@ -115,7 +136,7 @@ void Ghost::OnGhostEaten()
   ChangeMode(GhostMode::GoToReset, 0);
 }
 
-void Ghost::OnPacmanEaten()
+void Ghost::OnPacmanEaten() const
 {
   m_Game.m_State = Game::State::GAME_OVER;
 }
@@ -168,12 +189,6 @@ float Ghost::GetMoveTimeInterval() const
 
 void Ghost::UpdatePosition(float elapsedTime)
 {
-  const sf::Vector2i& pacmanPosition = m_Game.m_Pacman.GetPosition();
-  if (pacmanPosition == m_Position || pacmanPosition == m_NextPosition)
-  {
-    m_Mode->OnCollisionWithPacman();
-  }
-
   m_CameFrom = m_Position;
   m_Position = m_NextPosition;
 
@@ -213,11 +228,6 @@ void Ghost::UpdatePosition(float elapsedTime)
         m_Direction = Direction(i);
       }
     }
-  }
-
-  if (pacmanPosition == m_NextPosition)
-  {
-    m_Mode->OnCollisionWithPacman();
   }
 
   ++m_AnimationStage %= 2;

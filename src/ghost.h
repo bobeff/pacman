@@ -26,6 +26,7 @@ public:
 
   virtual ~Ghost();
   virtual void Draw() const;
+  virtual void Update(float elapsedTime);
 
   GhostMode::Mode GetMode() const;
 
@@ -39,7 +40,8 @@ public:
   void SetResetModeSprites();
   void Flicker();
   void OnGhostEaten();
-  void OnPacmanEaten();
+  void OnPacmanEaten() const;
+  void CheckForCollisionWithPacman() const;
 
 private:
   int GetDistanceToTarget(const sf::Vector2i& position) const;

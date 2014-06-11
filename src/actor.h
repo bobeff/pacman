@@ -18,8 +18,10 @@ public:
   virtual ~Actor() {}
 
   virtual void Draw() const;
-  void Update(float elapsedTime);
+  virtual void Update(float elapsedTime);
+
   const sf::Vector2i& GetPosition() const;
+  const sf::Vector2f& GetSpritePosition() const;
   Direction GetDirection() const;
   const sf::Vector2i& GetStartTile() const;
 
