@@ -44,10 +44,10 @@ void Maze::ConsumeTile(const sf::Vector2i& position)
   }
 
   tile = ' ';
-  
+
   if (m_TilesConsumed == m_ConsumableTilesCount)
   {
-    m_Game.m_State = Game::State::WINNING;
+    m_Game.m_State = Game::STATE_WINNING;
   }
 }
 
@@ -60,19 +60,19 @@ char Maze::GetTile(const sf::Vector2i& position) const
 void Maze::LoadTiles()
 {
   FILE* finp = fopen("assets/maze.txt", "r");
-  
+
   for (int y = 0; y < Y_SIZE; ++y)
   {
     for (int x = 0; x < X_SIZE; ++x)
     {
       fscanf(finp, "%c", &m_Tiles[y][x]);
-      
+
       if (m_Tiles[y][x] == '.' || m_Tiles[y][x] == '@')
       {
         ++m_ConsumableTilesCount;
       }
     }
-    
+
     // skip new line
     char newLine;
     fscanf(finp, "%c", &newLine);

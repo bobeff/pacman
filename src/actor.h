@@ -4,11 +4,11 @@ class Game;
 
 enum Direction
 {
-  EAST,
-  SOUTH,
-  WEST,
-  NORTH,
-  NONE,
+  DIRECTION_EAST,
+  DIRECTION_SOUTH,
+  DIRECTION_WEST,
+  DIRECTION_NORTH,
+  DIRECTION_NONE,
 };
 
 class Actor

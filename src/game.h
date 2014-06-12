@@ -25,12 +25,12 @@ public:
 private:
   enum State
   {
-    ABOUT_TO_START,
-    RUNNING,
-    PACMAN_EATEN,
-    PAUSED,
-    GAME_OVER,
-    WINNING,
+    STATE_ABOUT_TO_START,
+    STATE_RUNNING,
+    STATE_PACMAN_EATEN,
+    STATE_PAUSED,
+    STATE_GAME_OVER,
+    STATE_WINNING,
   };
 
   void DrawText(const char* str, const sf::Vector2f& position,

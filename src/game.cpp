@@ -3,14 +3,19 @@
 #include "gameplay_constants.h"
 #include "sprite_factory.h"
 
+sf::Vector2i RedGhostStrategy(const Game& game);
+sf::Vector2i BlueGhostStrategy(const Game& game);
+sf::Vector2i PinkGhostStrategy(const Game& game);
+sf::Vector2i OrangeGhostStrategy(const Game& game);
+
 Game::Game()
   : m_Maze(*this)
   , m_Pacman(*this)
   , m_EatenGhostsCount(0)
   , m_PacmanLivesCount(3)
   , m_Score(0)
-  , m_State(State::ABOUT_TO_START)
-  , m_OldState(State::ABOUT_TO_START)
+  , m_State(STATE_ABOUT_TO_START)
+  , m_OldState(STATE_ABOUT_TO_START)
   , m_PacmanEatenTime(0.0f)
 {
   m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,
@@ -25,9 +30,19 @@ Game::Game()
   m_Ghosts[Ghost::ORANGE] = new Ghost(*this, ORANGE_GHOST_START_TILE,
     ORANGE_GHOST_SCATTER_TARGET, OrangeGhostStrategy, Ghost::ORANGE, 4);
 
-  m_Window.create(sf::VideoMode(448, 576),
+  static const int WINDOW_WIDTH  = 448;
+  static const int WINDOW_HEIGHT = 576;
+
+  m_Window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
     "Pacman", sf::Style::Titlebar | sf::Style::Close);
   m_Window.setVerticalSyncEnabled(true);
+
+  sf::VideoMode videoMode = sf::VideoMode::getDesktopMode();
+
+  // center the window on the screen
+  m_Window.setPosition(sf::Vector2i(
+    videoMode.width  / 2 - WINDOW_WIDTH  / 2,
+    videoMode.height / 2 - WINDOW_HEIGHT / 2));
 
   m_Font.loadFromFile("assets/arial.ttf");
   m_Text.setFont(m_Font);
@@ -81,12 +96,12 @@ void Game::OnPacmanEaten()
 {
   if (0 == --m_PacmanLivesCount)
   {
-    m_State = State::GAME_OVER;
+    m_State = STATE_GAME_OVER;
   }
   else
   {
     m_PacmanEatenTime = m_Clock.getElapsedTime().asSeconds();
-    m_State = PACMAN_EATEN;
+    m_State = STATE_PACMAN_EATEN;
   }
 }
 
@@ -127,13 +142,13 @@ void Game::DrawGameInfo()
 
   switch (m_State)
   {
-  case State::PAUSED:
+  case STATE_PAUSED:
     DrawText("PAUSE", PAUSE_TEXT_POSITION, sf::Color::Red);
     break;
-  case State::GAME_OVER:
+  case STATE_GAME_OVER:
     DrawText("GAME OVER", GAME_OVER_TEXT_POSITION, sf::Color::Red);
     break;
-  case State::WINNING:
+  case STATE_WINNING:
     DrawText("YOU WIN", WINNING_TEXT_POSITION, sf::Color::Yellow);
     break;
   }
@@ -145,23 +160,23 @@ void Game::Update()
 
   switch (m_State)
   {
-  case State::RUNNING:
+  case STATE_RUNNING:
     m_Pacman.Update(elapsedTime);
     for (int i = 0; i < Ghost::COUNT; ++i)
     {
       m_Ghosts[i]->Update(elapsedTime);
     }
     break;
-  case State::ABOUT_TO_START:
+  case STATE_ABOUT_TO_START:
     if (elapsedTime > GAME_START_DELAY)
     {
-      m_State = State::RUNNING;
+      m_State = STATE_RUNNING;
     }
     break;
-  case State::PACMAN_EATEN:
+  case STATE_PACMAN_EATEN:
     if (elapsedTime > m_PacmanEatenTime + PACMAN_EATEN_DELAY)
     {
-      m_State = State::ABOUT_TO_START;
+      m_State = STATE_ABOUT_TO_START;
       Reset();
     }
     break;
@@ -187,30 +202,30 @@ int Game::Run()
           goto end_game;
         case sf::Keyboard::Left:
         case sf::Keyboard::A:
-          m_Pacman.NewDirection = Direction::WEST;
+          m_Pacman.NewDirection = DIRECTION_WEST;
           break;
         case sf::Keyboard::Right:
         case sf::Keyboard::D:
-          m_Pacman.NewDirection = Direction::EAST;
+          m_Pacman.NewDirection = DIRECTION_EAST;
           break;
         case sf::Keyboard::Up:
         case sf::Keyboard::W:
-          m_Pacman.NewDirection = Direction::NORTH;
+          m_Pacman.NewDirection = DIRECTION_NORTH;
           break;
         case sf::Keyboard::Down:
         case sf::Keyboard::S:
-          m_Pacman.NewDirection = Direction::SOUTH;
+          m_Pacman.NewDirection = DIRECTION_SOUTH;
           break;
         case sf::Keyboard::Pause:
         case sf::Keyboard::P:
-          if (m_State == State::PAUSED)
+          if (m_State == STATE_PAUSED)
           {
             m_State = m_OldState;
           }
-          else if (m_State != State::WINNING && m_State != State::GAME_OVER)
+          else if (m_State != STATE_WINNING && m_State != STATE_GAME_OVER)
           {
             m_OldState = m_State;
-            m_State = State::PAUSED;
+            m_State = STATE_PAUSED;
           }
           break;
         }

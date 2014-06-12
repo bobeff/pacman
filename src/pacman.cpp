@@ -6,10 +6,10 @@
 
 Pacman::Pacman(Game& game)
   : Actor(game, PACMAN_START_TILE, 0)
-  , NewDirection(Direction::NONE)
+  , NewDirection(DIRECTION_NONE)
   , m_MoveTimeInterval(PACMAN_MOVE_TIME)
 {
-  m_Direction = Direction::NONE;
+  m_Direction = DIRECTION_NONE;
   m_InitialSprite = SpriteFactory::Get().CreatePacmanInitialSprite();
   SetCurrentSprite();
 }
@@ -17,8 +17,8 @@ Pacman::Pacman(Game& game)
 void Pacman::Reset()
 {
   Actor::Reset();
-  NewDirection = Direction::NONE;
-  m_Direction = Direction::NONE;
+  NewDirection = DIRECTION_NONE;
+  m_Direction = DIRECTION_NONE;
   SetCurrentSprite();
 }
 
@@ -28,10 +28,10 @@ sf::Vector2i Pacman::GetPositionAhead(int tilesCount) const
 
   switch (m_Direction)
   {
-  case Direction::EAST:  position += sf::Vector2i(tilesCount, 0); break;
-  case Direction::WEST:  position -= sf::Vector2i(tilesCount, 0); break;
-  case Direction::NORTH: position -= sf::Vector2i(0, tilesCount); break;
-  case Direction::SOUTH: position += sf::Vector2i(0, tilesCount); break;
+  case DIRECTION_EAST:  position += sf::Vector2i(tilesCount, 0); break;
+  case DIRECTION_WEST:  position -= sf::Vector2i(tilesCount, 0); break;
+  case DIRECTION_NORTH: position -= sf::Vector2i(0, tilesCount); break;
+  case DIRECTION_SOUTH: position += sf::Vector2i(0, tilesCount); break;
   }
 
   return position;
@@ -39,7 +39,7 @@ sf::Vector2i Pacman::GetPositionAhead(int tilesCount) const
 
 void Pacman::SetCurrentSprite()
 {
-  if (m_Direction == Direction::NONE)
+  if (m_Direction == DIRECTION_NONE)
   {
     m_CurrentSprite = &m_InitialSprite;
     Maze::SetPosition(*m_CurrentSprite, m_Position);
@@ -54,10 +54,10 @@ static void UpdatePosition(Direction direction, sf::Vector2i& position)
 {
   switch (direction)
   {
-  case Direction::WEST:  --position.x; break;
-  case Direction::EAST:  ++position.x; break;
-  case Direction::NORTH: --position.y; break;
-  case Direction::SOUTH: ++position.y; break;
+  case DIRECTION_WEST:  --position.x; break;
+  case DIRECTION_EAST:  ++position.x; break;
+  case DIRECTION_NORTH: --position.y; break;
+  case DIRECTION_SOUTH: ++position.y; break;
   }
 
   Maze::TruncatePosition(position);
@@ -76,7 +76,7 @@ bool Pacman::IsMovePossible(const sf::Vector2i& position) const
 
 void Pacman::UpdatePosition(float elapsedTime)
 {
-  if (NewDirection == Direction::NONE)
+  if (NewDirection == DIRECTION_NONE)
     return;
 
   if (m_Position != m_NextPosition)
@@ -92,7 +92,7 @@ void Pacman::UpdatePosition(float elapsedTime)
 
   newPosition = m_Position;
   ::UpdatePosition(m_Direction, newPosition);
-    
+
   if (IsMovePossible(newPosition))
   {
     m_NextPosition = newPosition;
@@ -100,6 +100,6 @@ void Pacman::UpdatePosition(float elapsedTime)
   }
   else
   {
-    NewDirection = Direction::NONE;
+    NewDirection = DIRECTION_NONE;
   }
 }
