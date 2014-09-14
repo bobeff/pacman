@@ -15,7 +15,21 @@
 *.a
 *.lib
 
+# Compiled Precompiled headers
+*.gch
+
 # Executables
 *.exe
 *.out
 *.app
+
+# Code::Blocks files
+*.depend
+*.layout
+
+# Build directories
+bin
+build
+
+# CLion directory
+.idea
