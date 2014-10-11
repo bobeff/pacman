@@ -33,3 +33,7 @@ build
 
 # CLion directory
 .idea
+
+# Qt Creator files
+*.user
+
