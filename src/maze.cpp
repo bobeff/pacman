@@ -3,18 +3,18 @@
 #include "game.h"
 #include "sprite_factory.h"
 
-Maze::Maze(Game& game)
-  : m_Game(game)
-  , m_ConsumableTilesCount(0)
-  , m_TilesConsumed(0)
+Maze::Maze(Game& game) : m_Game(game)
 {
   m_Texture.loadFromFile("assets/maze.png");
   m_Sprite.setTexture(m_Texture);
   m_Sprite.scale(2, 2);
+
   SpriteFactory& factory = SpriteFactory::Get();
   m_DotSprite = factory.CreateDotSprite();
   m_EnergizerSprite = factory.CreateEnergizerSprite();
+
   LoadTiles();
+  Reset();
 }
 
 static void AssertPositionInRange(const sf::Vector2i& position)
@@ -57,17 +57,25 @@ char Maze::GetTile(const sf::Vector2i& position) const
   return m_Tiles[position.y][position.x];
 }
 
+void Maze::Reset()
+{
+  m_TilesConsumed = 0;
+  memcpy(m_Tiles, m_InitialTiles, sizeof(Tiles));
+}
+
 void Maze::LoadTiles()
 {
   FILE* finp = fopen("assets/maze.txt", "r");
+
+  m_ConsumableTilesCount = 0;
 
   for (int y = 0; y < Y_SIZE; ++y)
   {
     for (int x = 0; x < X_SIZE; ++x)
     {
-      fscanf(finp, "%c", &m_Tiles[y][x]);
+      fscanf(finp, "%c", &m_InitialTiles[y][x]);
 
-      if (m_Tiles[y][x] == '.' || m_Tiles[y][x] == '@')
+      if (m_InitialTiles[y][x] == '.' || m_InitialTiles[y][x] == '@')
       {
         ++m_ConsumableTilesCount;
       }
@@ -83,7 +91,9 @@ void Maze::LoadTiles()
 
 void Maze::Draw()
 {
-  m_Game.m_Window.draw(m_Sprite);
+  sf::RenderWindow& window = m_Game.GetRenderWindow();
+
+  window.draw(m_Sprite);
 
   sf::Sprite* sprite;
   for (int y = 0; y < Y_SIZE; ++y)
@@ -99,7 +109,7 @@ void Maze::Draw()
 
       if (!sprite) continue;
       SetPosition(*sprite, x, y);
-      m_Game.m_Window.draw(*sprite);
+      window.draw(*sprite);
     }
   }
 }

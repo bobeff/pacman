@@ -1,22 +1,18 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "game.h"
 #include "gameplay_constants.h"
 #include "sprite_factory.h"
+#include "application.h"
 
 sf::Vector2i RedGhostStrategy(const Game& game);
 sf::Vector2i BlueGhostStrategy(const Game& game);
 sf::Vector2i PinkGhostStrategy(const Game& game);
 sf::Vector2i OrangeGhostStrategy(const Game& game);
 
-Game::Game()
-  : m_Maze(*this)
+Game::Game(Application& app)
+  : Screen(app)
+  , m_Maze(*this)
   , m_Pacman(*this)
-  , m_EatenGhostsCount(0)
-  , m_PacmanLivesCount(3)
-  , m_Score(0)
-  , m_State(STATE_ABOUT_TO_START)
-  , m_OldState(STATE_ABOUT_TO_START)
-  , m_PacmanEatenTime(0.0f)
 {
   m_Ghosts[Ghost::RED] = new Ghost(*this, RED_GHOST_START_TILE,
     RED_GHOST_SCATTER_TARGET, RedGhostStrategy, Ghost::RED, 1);
@@ -30,25 +26,7 @@ Game::Game()
   m_Ghosts[Ghost::ORANGE] = new Ghost(*this, ORANGE_GHOST_START_TILE,
     ORANGE_GHOST_SCATTER_TARGET, OrangeGhostStrategy, Ghost::ORANGE, 4);
 
-  static const int WINDOW_WIDTH  = 448;
-  static const int WINDOW_HEIGHT = 576;
-
-  m_Window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
-    "Pacman", sf::Style::Titlebar | sf::Style::Close);
-  m_Window.setVerticalSyncEnabled(true);
-
-  sf::VideoMode videoMode = sf::VideoMode::getDesktopMode();
-
-  // center the window on the screen
-  m_Window.setPosition(sf::Vector2i(
-    videoMode.width  / 2 - WINDOW_WIDTH  / 2,
-    videoMode.height / 2 - WINDOW_HEIGHT / 2));
-
-  m_Font.loadFromFile("assets/arial.ttf");
-  m_Text.setFont(m_Font);
-  m_Text.setCharacterSize(Maze::TILE_SIZE);
-  m_Text.setColor(sf::Color::Yellow);
-  m_Text.setStyle(sf::Text::Bold);
+  ResetScreen();
 }
 
 Game::~Game()
@@ -59,13 +37,87 @@ Game::~Game()
   }
 }
 
-void Game::DrawText(const char* str, const sf::Vector2f& position,
-  const sf::Color& color)
+void Game::ProcessInput(const sf::Event::KeyEvent& key)
 {
-  m_Text.setString(str);
-  m_Text.setPosition(position);
-  m_Text.setColor(color);
-  m_Window.draw(m_Text);
+  switch (key.code)
+  {
+  case sf::Keyboard::Escape:
+    m_State = STATE_EXIT;
+    break;
+  case sf::Keyboard::Left:
+  case sf::Keyboard::A:
+    m_Pacman.NewDirection = DIRECTION_WEST;
+    break;
+  case sf::Keyboard::Right:
+  case sf::Keyboard::D:
+    m_Pacman.NewDirection = DIRECTION_EAST;
+    break;
+  case sf::Keyboard::Up:
+  case sf::Keyboard::W:
+    m_Pacman.NewDirection = DIRECTION_NORTH;
+    break;
+  case sf::Keyboard::Down:
+  case sf::Keyboard::S:
+    m_Pacman.NewDirection = DIRECTION_SOUTH;
+    break;
+  case sf::Keyboard::Pause:
+  case sf::Keyboard::P:
+    if (m_State == STATE_PAUSED)
+    {
+      m_State = m_OldState;
+    }
+    else if (m_State != STATE_WINNING && m_State != STATE_GAME_OVER)
+    {
+      m_OldState = m_State;
+      m_State = STATE_PAUSED;
+    }
+    break;
+  }
+}
+
+void Game::Update()
+{
+  float elapsedTime = m_Clock.getElapsedTime().asSeconds();
+
+  switch (m_State)
+  {
+  case STATE_RUNNING:
+    m_Pacman.Update(elapsedTime);
+    for (int i = 0; i < Ghost::COUNT; ++i)
+    {
+      m_Ghosts[i]->Update(elapsedTime);
+    }
+    break;
+  case STATE_ABOUT_TO_START:
+    if (elapsedTime > GAME_START_DELAY)
+    {
+      m_State = STATE_RUNNING;
+    }
+    break;
+  case STATE_PACMAN_EATEN:
+    if (elapsedTime > m_PacmanEatenTime + PACMAN_EATEN_DELAY)
+    {
+      m_State = STATE_ABOUT_TO_START;
+      Reset();
+    }
+    break;
+  case STATE_EXIT:
+    m_App.BackToMainMenu();
+    break;
+  }
+}
+
+void Game::Draw()
+{
+  m_Maze.Draw();
+  m_Pacman.Draw();
+
+  for (int i = 0; i < Ghost::COUNT; ++i)
+  {
+    m_Ghosts[i]->Draw();
+  }
+
+  DrawGameInfo();
 }
 
 void Game::SetGhostsToRunMode()
@@ -137,7 +189,7 @@ void Game::DrawGameInfo()
       LIVES_TEXT_POSITION.x + (i * 1.25f + 3.5f) * Maze::TILE_SIZE,
       LIVES_TEXT_POSITION.y);
 
-    m_Window.draw(liveSprite);
+    m_App.m_Window.draw(liveSprite);
   }
 
   switch (m_State)
@@ -154,99 +206,26 @@ void Game::DrawGameInfo()
   }
 }
 
-void Game::Update()
+void Game::ResetScreen()
 {
-  float elapsedTime = m_Clock.getElapsedTime().asSeconds();
+  m_EatenGhostsCount = 0;
+  m_PacmanLivesCount = 3;
+  m_Score = 0;
+  m_State = STATE_ABOUT_TO_START;
+  m_OldState = STATE_ABOUT_TO_START;
+  m_PacmanEatenTime = 0.0f;
+  m_Maze.Reset();
 
-  switch (m_State)
-  {
-  case STATE_RUNNING:
-    m_Pacman.Update(elapsedTime);
-    for (int i = 0; i < Ghost::COUNT; ++i)
-    {
-      m_Ghosts[i]->Update(elapsedTime);
-    }
-    break;
-  case STATE_ABOUT_TO_START:
-    if (elapsedTime > GAME_START_DELAY)
-    {
-      m_State = STATE_RUNNING;
-    }
-    break;
-  case STATE_PACMAN_EATEN:
-    if (elapsedTime > m_PacmanEatenTime + PACMAN_EATEN_DELAY)
-    {
-      m_State = STATE_ABOUT_TO_START;
-      Reset();
-    }
-    break;
-  }
+  Reset();
 }
 
-int Game::Run()
+sf::RenderWindow& Game::GetRenderWindow() const
 {
-  while (m_Window.isOpen())
-  {
-    sf::Event event;
-    while (m_Window.pollEvent(event))
-    {
-      switch (event.type)
-      {
-      case sf::Event::Closed:
-        m_Window.close();
-        break;
-      case sf::Event::KeyPressed:
-        switch (event.key.code)
-        {
-        case sf::Keyboard::Escape:
-          goto end_game;
-        case sf::Keyboard::Left:
-        case sf::Keyboard::A:
-          m_Pacman.NewDirection = DIRECTION_WEST;
-          break;
-        case sf::Keyboard::Right:
-        case sf::Keyboard::D:
-          m_Pacman.NewDirection = DIRECTION_EAST;
-          break;
-        case sf::Keyboard::Up:
-        case sf::Keyboard::W:
-          m_Pacman.NewDirection = DIRECTION_NORTH;
-          break;
-        case sf::Keyboard::Down:
-        case sf::Keyboard::S:
-          m_Pacman.NewDirection = DIRECTION_SOUTH;
-          break;
-        case sf::Keyboard::Pause:
-        case sf::Keyboard::P:
-          if (m_State == STATE_PAUSED)
-          {
-            m_State = m_OldState;
-          }
-          else if (m_State != STATE_WINNING && m_State != STATE_GAME_OVER)
-          {
-            m_OldState = m_State;
-            m_State = STATE_PAUSED;
-          }
-          break;
-        }
-      }
-    }
+  return m_App.m_Window;
+}
 
-    Update();
-
-    m_Window.clear(sf::Color::Black);
-    m_Maze.Draw();
-    m_Pacman.Draw();
-    for (int i = 0; i < Ghost::COUNT; ++i)
-    {
-      m_Ghosts[i]->Draw();
-    }
-
-    DrawGameInfo();
-
-    m_Window.display();
-  }
-
-end_game:
-  return 0;
+void Game::DrawText(const char* text, const sf::Vector2f& position,
+  const sf::Color& color)
+{
+  m_App.DrawText(text, position, color, sf::Text::Bold, Maze::TILE_SIZE);
 }

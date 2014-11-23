@@ -4,9 +4,11 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CONFIGURATION_TYPES Debug Release CACHE TYPE INTERNAL FORCE)
 project(pacman)
 
-add_executable(pacman
+add_executable(${CMAKE_PROJECT_NAME}
   src/actor.cpp
   src/actor.h
+  src/application.cpp
+  src/application.h
   src/game.cpp
   src/game.h
   src/gameplay_constants.cpp
@@ -17,12 +19,15 @@ add_executable(pacman
   src/ghost.cpp
   src/ghost.h
   src/main.cpp
+  src/main_menu.h
+  src/main_menu.cpp
   src/maze.cpp
   src/maze.h
   src/pacman.cpp
   src/pacman.h
   src/pch.cpp
   src/pch.h
+  src/screen.h
   src/sprite_factory.cpp
   src/sprite_factory.h)
 
@@ -31,24 +36,34 @@ option(USE_STATIC_STD_LIBS "Link system libraries statically." OFF)
 # add SFML library dependencies
 add_subdirectory("third_party/lib/SFML")
 include_directories("third_party/lib/SFML/include")
-target_link_libraries(${CMAKE_PROJECT_NAME} sfml-system sfml-window sfml-graphics)
+target_link_libraries(${CMAKE_PROJECT_NAME}
+  sfml-system
+  sfml-window
+  sfml-graphics)
 
 if (NOT ${BUILD_SHARED_LIBS})
   add_definitions(-DSFML_STATIC)
 endif ()
 
 # add additional compiler and linker flags
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR
+    ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-result -Wno-switch")
   set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -s")
+
   if (${USE_STATIC_STD_LIBS})
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    set(CMAKE_EXE_LINKER_FLAGS
+        "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
   endif ()
+
 elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /D_CRT_SECURE_NO_WARNINGS")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox /GL")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /INCREMENTAL")
-  set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /SUBSYSTEM:WINDOWS")
+  set(CMAKE_EXE_LINKER_FLAGS_RELEASE
+      "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /SUBSYSTEM:WINDOWS")
 
   if (${USE_STATIC_STD_LIBS})
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
@@ -60,6 +75,7 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
     COMMAND ${CMAKE_COMMAND} -E copy_directory
       "${CMAKE_CURRENT_BINARY_DIR}/third_party/lib/SFML/lib/$<CONFIGURATION>"
       "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>")
+
 else ()
   message(FATAL_ERROR "Unsupported compiler ${CMAKE_CXX_COMPILER_ID}.")
 endif ()

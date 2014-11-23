@@ -6,9 +6,11 @@ class Maze
 {
 public:
   Maze(Game& game);
+
   void Draw();
   void ConsumeTile(const sf::Vector2i& position);
   char GetTile(const sf::Vector2i& position) const;
+  void Reset();
 
   static void SetPosition(sf::Transformable& object, int x, int y);
   static void SetPosition(sf::Transformable& object, float x, float y);
@@ -35,7 +37,9 @@ private:
   sf::Sprite m_DotSprite;
   sf::Sprite m_EnergizerSprite;
 
-  char m_Tiles[Y_SIZE][X_SIZE];
+  typedef char Tiles[Y_SIZE][X_SIZE];
+  Tiles m_Tiles;
+  Tiles m_InitialTiles;
 
   sf::Uint8 m_ConsumableTilesCount;
   sf::Uint8 m_TilesConsumed;

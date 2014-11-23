@@ -1,10 +1,11 @@
 #pragma once
 
+#include "screen.h"
 #include "maze.h"
 #include "pacman.h"
 #include "ghost.h"
 
-class Game
+class Game : public Screen
 {
   friend class Maze;
   friend class Actor;
@@ -17,10 +18,13 @@ class Game
   friend sf::Vector2i OrangeGhostStrategy(const Game& game);
 
 public:
-  Game();
-  ~Game();
+  Game(Application& app);
+  virtual ~Game();
 
-  int Run();
+  virtual void ProcessInput(const sf::Event::KeyEvent& key);
+  virtual void Update();
+  virtual void Draw();
+  virtual void ResetScreen();
 
 private:
   enum State
@@ -31,22 +35,19 @@ private:
     STATE_PAUSED,
     STATE_GAME_OVER,
     STATE_WINNING,
+    STATE_EXIT,
   };
 
-  void DrawText(const char* str, const sf::Vector2f& position,
-    const sf::Color& color);
-
   void Reset();
-  void Update();
   void SetGhostsToRunMode();
   void OnPacmanEaten();
   void DrawGameInfo();
+  sf::RenderWindow& GetRenderWindow() const;
 
-  sf::RenderWindow m_Window;
+  void DrawText(const char* text, const sf::Vector2f& position,
+    const sf::Color& color);
+
   sf::Clock m_Clock;
-
-  sf::Font m_Font;
-  sf::Text m_Text;
 
   Maze m_Maze;
   Pacman m_Pacman;

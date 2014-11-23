@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "game.h"
+#include "application.h"
 
 #if !defined(_DEBUG) && defined(WIN32)
   int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance,
@@ -9,6 +9,6 @@
 #endif
 
 {
-  Game game;
-  return game.Run();
+  Application app;
+  return app.Run();
 }

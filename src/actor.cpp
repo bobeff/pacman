@@ -2,6 +2,7 @@
 #include "actor.h"
 #include "game.h"
 #include "sprite_factory.h"
+#include "application.h"
 
 Actor::Actor(Game& game, const sf::Vector2i& startPosition, int spritesIndex)
   : m_Game(game)
@@ -29,7 +30,7 @@ void Actor::Reset()
 
 void Actor::Draw() const
 {
-  m_Game.m_Window.draw(*m_CurrentSprite);
+  m_Game.GetRenderWindow().draw(*m_CurrentSprite);
 }
 
 void Actor::SetCurrentSprite()
