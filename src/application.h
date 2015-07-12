@@ -22,6 +22,8 @@ public:
                 sf::Uint32 style,
                 unsigned size);
 
+  sf::RenderWindow& GetRenderWindow();
+
 private:
   enum AppScreen
   {

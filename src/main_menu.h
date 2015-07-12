@@ -13,12 +13,18 @@ public:
   MainMenu(Application& app);
   virtual ~MainMenu();
 
-  virtual void ProcessInput(const sf::Event::KeyEvent& key);
+  virtual void ProcessInput(const sf::Event& event);
   virtual void Update();
   virtual void Draw();
   virtual void ResetScreen();
 
 private:
+  void ProcessKeyboardInput(const sf::Event::KeyEvent& keyEvent);
+  void ProcessMouseMove(const sf::Event::MouseMoveEvent& event);
+  void ProcessMousePress(const sf::Event::MouseButtonEvent& event);
+
+  void changeSelectedItem(int newItemIndex);
+
   enum Item
   {
     ITEM_NEW_GAME,

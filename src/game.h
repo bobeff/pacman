@@ -21,7 +21,7 @@ public:
   Game(Application& app);
   virtual ~Game();
 
-  virtual void ProcessInput(const sf::Event::KeyEvent& key);
+  virtual void ProcessInput(const sf::Event& event);
   virtual void Update();
   virtual void Draw();
   virtual void ResetScreen();

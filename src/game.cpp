@@ -37,9 +37,12 @@ Game::~Game()
   }
 }
 
-void Game::ProcessInput(const sf::Event::KeyEvent& key)
+void Game::ProcessInput(const sf::Event& event)
 {
-  switch (key.code)
+  if (event.type != sf::Event::KeyPressed)
+    return;
+
+  switch (event.key.code)
   {
   case sf::Keyboard::Escape:
     m_State = STATE_EXIT;

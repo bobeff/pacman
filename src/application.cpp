@@ -56,6 +56,11 @@ void Application::ChangeScreen(AppScreen screen)
   m_CurrentScreen->ResetScreen();
 }
 
+sf::RenderWindow& Application::GetRenderWindow()
+{
+  return m_Window;
+}
+
 int Application::Run()
 {
   while (m_Window.isOpen())
@@ -68,14 +73,16 @@ int Application::Run()
       case sf::Event::Closed:
         m_Window.close();
         break;
-      case sf::Event::KeyPressed:
-        m_CurrentScreen->ProcessInput(event.key);
-        break;
+      default:
+        if(m_CurrentScreen)
+          m_CurrentScreen->ProcessInput(event);
       }
     }
 
-    m_CurrentScreen->Update();
-    if (m_CurrentScreen == 0)
+    if(m_CurrentScreen)
+      m_CurrentScreen->Update();
+
+    if (0 == m_CurrentScreen)
       goto end_game;
 
     m_Window.clear(sf::Color::Black);

@@ -46,19 +46,19 @@ void Ghost::Reset()
   m_IsModeChanged = false;
 }
 
-//#define ENABLE_DEBUG_VISUALIZATIONS
+//#define DEBUG_VISUALIZATIONS_ENABLED
 
 void Ghost::Draw() const
 {
   Actor::Draw();
 
-#ifdef ENABLE_DEBUG_VISUALIZATIONS
+#ifdef DEBUG_VISUALIZATIONS_ENABLED
   static sf::RectangleShape square(
     sf::Vector2f(Maze::TILE_SIZE, Maze::TILE_SIZE));
   sf::Vector2i targetTile = m_Mode->GetTargetTile();
   Maze::SetPosition(square, targetTile);
   square.setFillColor(GetColor());
-  m_Game.m_Window.draw(square);
+  m_Game.GetRenderWindow().draw(square);
 #endif
 }
 
