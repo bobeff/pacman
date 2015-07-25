@@ -33,6 +33,10 @@ add_subdirectory("third_party/lib/SFML")
 include_directories("third_party/lib/SFML/include")
 target_link_libraries(${CMAKE_PROJECT_NAME} sfml-system sfml-window sfml-graphics)
 
+if (NOT ${BUILD_SHARED_LIBS})
+  add_definitions(-DSFML_STATIC)
+endif ()
+
 # add additional compiler and linker flags
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-result -Wno-switch")
@@ -48,7 +52,7 @@ elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 
   if (${USE_STATIC_STD_LIBS})
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
-    set(CMAKE_CXX_FLAGS_RELEASE "{$CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
   endif ()
 
   # copy DLL files into Pacman binary directory using post build even
