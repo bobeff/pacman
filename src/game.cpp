@@ -186,13 +186,15 @@ void Game::DrawGameInfo()
   DrawText(scoreStr, SCORE_TEXT_POSITION, sf::Color::Yellow);
   DrawText("Lives: ", LIVES_TEXT_POSITION, sf::Color::Yellow);
 
+  sf::RenderWindow& window = m_App.GetRenderWindow();
+
   for (int i = 0; i < m_PacmanLivesCount - 1; ++i)
   {
     liveSprite.setPosition(
       LIVES_TEXT_POSITION.x + (i * 1.25f + 3.5f) * Maze::TILE_SIZE,
       LIVES_TEXT_POSITION.y);
 
-    m_App.m_Window.draw(liveSprite);
+    window.draw(liveSprite);
   }
 
   switch (m_State)
@@ -224,7 +226,7 @@ void Game::ResetScreen()
 
 sf::RenderWindow& Game::GetRenderWindow() const
 {
-  return m_App.m_Window;
+  return m_App.GetRenderWindow();
 }
 
 void Game::DrawText(const char* text, const sf::Vector2f& position,

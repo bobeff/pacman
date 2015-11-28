@@ -1,72 +1,7 @@
 #include "pch.h"
 #include "main_menu.h"
 #include "application.h"
-
-#define DEBUG_VISUALIZATIONS_ENABLED 
-
-class MenuItem
-{
-public:
-  MenuItem(Application& app,
-           const char* text,
-           const sf::Vector2f& position,
-           float boxWidth,
-           float selectedBoxWidth)
-    : IsSelected(false)
-    , m_App(app)
-    , m_Text(text)
-    , m_Position(position)
-    , m_Rect(sf::Vector2f(boxWidth, 22.f))
-    , m_SelectedRect(sf::Vector2f(selectedBoxWidth, 22.f))
-  {
-    SetRectShapeProperties(m_Rect);
-    SetRectShapeProperties(m_SelectedRect);
-  }
-
-  void Draw()
-  {
-    static const sf::Color GRAY(127, 127, 127);
-
-    const sf::Color& color = IsSelected ? sf::Color::White : GRAY;
-    sf::Text::Style style = IsSelected ? sf::Text::Bold : sf::Text::Regular;
-    m_App.DrawText(m_Text, m_Position, color, style, 30);
-
-#ifdef DEBUG_VISUALIZATIONS_ENABLED
-    sf::RenderWindow& window = m_App.GetRenderWindow();
-    window.draw(m_Rect);
-    window.draw(m_SelectedRect);
-#endif
-  }
-
-  bool IsSelected;
-
-  bool IsMouseOver(float x, float y)
-  {
-    sf::RectangleShape& rect = IsSelected ? m_SelectedRect : m_Rect;
-    const sf::Vector2f& position = rect.getPosition();
-    const sf::Vector2f& size = rect.getSize();
-
-    return x >= position.x && x <= position.x + size.x &&
-           y >= position.y && y <= position.y + size.y;
-  }
-
-private:
-  void SetRectShapeProperties(sf::RectangleShape& rect)
-  {
-    rect.setPosition(m_Position + sf::Vector2f(0, 8));
-#ifdef DEBUG_VISUALIZATIONS_ENABLED
-    rect.setFillColor(sf::Color::Transparent);
-    rect.setOutlineColor(sf::Color::White);
-    rect.setOutlineThickness(1);
-#endif
-  }
-
-  Application& m_App;
-  const char* m_Text;
-  const sf::Vector2f m_Position;
-  sf::RectangleShape m_Rect;
-  sf::RectangleShape m_SelectedRect;
-};
+#include "menu_item.h"
 
 MainMenu::MainMenu(Application& app) : Screen(app)
 {
@@ -114,7 +49,7 @@ void MainMenu::ProcessInput(const sf::Event& event)
   }
 }
 
-void MainMenu::changeSelectedItem(int newItemIndex)
+void MainMenu::ChangeSelectedItem(int newItemIndex)
 {
   assert(newItemIndex >= 0 && newItemIndex < ITEMS_COUNT);
   assert(m_Items[m_CurrentItemIndex]->IsSelected);
@@ -130,7 +65,7 @@ void MainMenu::ProcessMouseMove(const sf::Event::MouseMoveEvent& event)
   {
     if (m_Items[i]->IsMouseOver(float(event.x), float(event.y)))
     {
-      changeSelectedItem(i);
+      ChangeSelectedItem(i);
       break;
     }
   }
@@ -161,12 +96,12 @@ void MainMenu::ProcessKeyboardInput(const sf::Event::KeyEvent& keyEvent)
   case sf::Keyboard::Down:
   case sf::Keyboard::S:
     if (m_CurrentItemIndex < ITEMS_COUNT - 1)
-      changeSelectedItem(m_CurrentItemIndex + 1);
+      ChangeSelectedItem(m_CurrentItemIndex + 1);
     break;
   case sf::Keyboard::Up:
   case sf::Keyboard::W:
     if (m_CurrentItemIndex > 0)
-      changeSelectedItem(m_CurrentItemIndex - 1);
+      ChangeSelectedItem(m_CurrentItemIndex - 1);
     break;
   case sf::Keyboard::Return:
   case sf::Keyboard::Space:
@@ -187,6 +122,9 @@ void MainMenu::Update()
   {
   case ITEM_NEW_GAME:
     m_App.NewGame();
+    break;
+  case ITEM_HIGH_SCORES:
+    m_App.ShowHighScores();
     break;
   case ITEM_EXIT:
     m_App.Exit();

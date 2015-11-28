@@ -2,11 +2,13 @@
 #include "application.h"
 #include "game.h"
 #include "main_menu.h"
+#include "high_scores_screen.h"
 
 Application::Application()
 {
   m_Screens[SCREEN_GAME] = new Game(*this);
   m_Screens[SCREEN_MAIN_MENU] = new MainMenu(*this);
+  m_Screens[SCREEN_HIGH_SCORES] = new HighScoresScreen(*this);
   m_CurrentScreen = m_Screens[SCREEN_MAIN_MENU];
 
   static const int WINDOW_WIDTH  = 448;
@@ -45,6 +47,11 @@ void Application::BackToMainMenu()
   ChangeScreen(SCREEN_MAIN_MENU);
 }
 
+void Application::ShowHighScores()
+{
+  ChangeScreen(SCREEN_HIGH_SCORES);
+}
+
 void Application::Exit()
 {
   m_CurrentScreen = 0;
@@ -59,6 +66,11 @@ void Application::ChangeScreen(AppScreen screen)
 sf::RenderWindow& Application::GetRenderWindow()
 {
   return m_Window;
+}
+
+HighScoresData& Application::GetHighScores()
+{
+  return m_HighScores;
 }
 
 int Application::Run()

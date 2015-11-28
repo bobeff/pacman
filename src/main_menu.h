@@ -23,7 +23,7 @@ private:
   void ProcessMouseMove(const sf::Event::MouseMoveEvent& event);
   void ProcessMousePress(const sf::Event::MouseButtonEvent& event);
 
-  void changeSelectedItem(int newItemIndex);
+  void ChangeSelectedItem(int newItemIndex);
 
   enum Item
   {

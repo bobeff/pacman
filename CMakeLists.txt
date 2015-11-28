@@ -16,6 +16,10 @@ add_executable(${CMAKE_PROJECT_NAME}
   src/ghost_modes.cpp
   src/ghost_modes.h
   src/ghost_strategies.cpp
+  src/high_scores_data.cpp
+  src/high_scores_data.h
+  src/high_scores_screen.cpp
+  src/high_scores_screen.h
   src/ghost.cpp
   src/ghost.h
   src/main.cpp
@@ -23,6 +27,8 @@ add_executable(${CMAKE_PROJECT_NAME}
   src/main_menu.cpp
   src/maze.cpp
   src/maze.h
+  src/menu_item.cpp
+  src/menu_item.h
   src/pacman.cpp
   src/pacman.h
   src/pch.cpp
